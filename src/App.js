@@ -1,27 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import NameInput from "./components/NameInput";
+import HyperloopDesigner from "./components/HyperloopDesigner";
+import "./css/App.css";
 
-function App() {
+
+export default function App() {
+  const [username, setUsername] = useState(() => localStorage.getItem("username") || "");
+
+  const handleReset = () => {
+    localStorage.removeItem("username");
+    setUsername("");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          <div className='test'>
-            <p>dit is een test</p>
-          </div>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ width: "100%", height: "100%" }}>
+      {!username ? (
+        <NameInput setUsername={setUsername} />
+      ) : (
+        <HyperloopDesigner username={username} onReset={handleReset} />
+      )}
     </div>
   );
 }
-
-export default App;
