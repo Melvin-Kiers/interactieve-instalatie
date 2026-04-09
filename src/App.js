@@ -13,12 +13,15 @@ export default function App() {
   };
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      {!username ? (
-        <NameInput setUsername={setUsername} />
-      ) : (
-        <HyperloopDesigner username={username} onReset={handleReset} />
-      )}
-    </div>
+    <>
+      <div className="background-map"></div>
+      <div style={{ width: "100%", height: "100%" }}>
+        {!username ? (
+          <NameInput setUsername={setUsername} />
+        ) : (
+          <HyperloopDesigner username={username} onReset={handleReset} />
+        )}
+      </div>
+    </>
   );
 }

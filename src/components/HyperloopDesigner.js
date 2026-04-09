@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import HyperloopResult from "./HyperloopResult";
 
 export default function HyperloopDesigner({ username, onReset }) {
   const [selectedPart, setSelectedPart] = useState(null);
@@ -131,10 +132,10 @@ export default function HyperloopDesigner({ username, onReset }) {
 
   return (
     <div className="container">
-  <div className="designer-header">
-    <h2>Hallo {username}, ontwerp je Hyperloop!</h2>
-    <button onClick={onReset}>Reset naam</button>
-  </div>
+      <div className="designer-header">
+        <h2>Hallo {username}, ontwerp je Hyperloop!</h2>
+        <button onClick={onReset}>Terug naar start</button>
+      </div>
 
   {!selectedPart && !submitted && (
     <div className="part-selection">
@@ -142,8 +143,9 @@ export default function HyperloopDesigner({ username, onReset }) {
       <div className="part-selection-items">
         {parts.map(part => (
           <div key={part.id} onClick={() => setSelectedPart(part)} style={{ cursor: "pointer" }}>
-            <img src={`data:image/svg+xml;base64,${btoa(part.svgString.replace(/__COLOR__/g,"#FF0000"))}`} alt={part.name} />
+            <img src={`data:image/svg+xml;base64,${btoa(part.svgString.replace(/__COLOR__/g,"#F6653A"))}`} alt={part.name} />
             <p>{part.name}</p>
+            <div className="info-hyperloop"></div>
           </div>
         ))}
       </div>
@@ -182,11 +184,12 @@ export default function HyperloopDesigner({ username, onReset }) {
   )}
 
   {submitted && drawingData && (
-    <div className="result">
-      <h3>Jouw Hyperloop ontwerp</h3>
-      <img src={drawingData} alt="Hyperloop ontwerp" />
+    <HyperloopResult 
+      drawingData={drawingData}
+      selectedPart={selectedPart}
+      onReset={onReset}
+    />
+    )}
     </div>
-  )}
-</div>
   );
 }
