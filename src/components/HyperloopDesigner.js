@@ -126,9 +126,15 @@ export default function HyperloopDesigner({ username, onReset }) {
 
   const handleSubmit = () => {
     if (canvasRef.current) {
-      setDrawingData(canvasRef.current.toDataURL());
+      const data = canvasRef.current.toDataURL();
+
+      setDrawingData(data);
       setSubmitted(true);
+
+      // 🔥 DIT IS CRUCIAAL
+      localStorage.setItem("hyperloopImage", data);
     }
+    console.log("opgeslagen afbeelding!");
   };
 
   return (
