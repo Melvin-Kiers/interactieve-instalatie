@@ -188,7 +188,7 @@ export default function HyperloopDesigner({ username, onReset }) {
       <canvas
         ref={canvasRef}
         width={Math.min(window.innerWidth * 0.8, 600)}
-        height={Math.min(window.innerHeight * 0.6, 400)}
+        height={Math.min(window.innerHeight * 0.6, 200)}
         onMouseDown={startDrawing}
         onMouseUp={stopDrawing}
         onMouseMove={draw}

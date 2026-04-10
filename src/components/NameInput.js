@@ -1,4 +1,5 @@
 import { useState } from "react";
+import VantaBackground from "./VantaBackground";
 
 export default function NameInput({ setUsername }) {
   const [inputValue, setInputValue] = useState("");
@@ -12,8 +13,9 @@ export default function NameInput({ setUsername }) {
 
   return (
     <div className="start">
+      <VantaBackground />
       <div className="text">
-        <h1>Dit is de tekst die boven staat</h1>
+        <h1>Ontwerp je eigen Hyperloop en test hem uit!</h1>
       </div>
       <div className="input_field" style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 50 }}>
         <input

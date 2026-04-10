@@ -182,8 +182,6 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
         ⚡ Snelheid: {Math.round(velocity * 100)}km/u
       </div>
 
-      <p>Basis snelheid: {baseSpeed.toFixed(1)}</p>
-
       {/* 🎮 GAME BAR */}
       <div className="game-bar-wrapper">
         <div className="game-bar">
