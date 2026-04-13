@@ -5,9 +5,8 @@ import NameInput from "./components/NameInput";
 import HyperloopDesigner from "./components/HyperloopDesigner";
 import GameHub from "./components/GameHub";
 
-
-
 import MiniGame1 from "./components/MiniGame1";
+import MiniGame2 from "./components/MiniGame2";
 
 import "./css/App.css";
 
@@ -91,6 +90,20 @@ export default function App() {
           element={
             username ? (
               <MiniGame1 
+                updateScore={updateScore}
+                markGameAsPlayed={markGameAsPlayed}
+              />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+
+        <Route
+          path="/game/2"
+          element={
+            username ? (
+              <MiniGame2 
                 updateScore={updateScore}
                 markGameAsPlayed={markGameAsPlayed}
               />
