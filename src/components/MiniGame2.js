@@ -5,7 +5,6 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
-
   const [isBottom, setIsBottom] = useState(false);
 
   const [obstacleLane, setObstacleLane] = useState(0);
@@ -14,15 +13,16 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const [running, setRunning] = useState(true);
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(1);
-
   const [gameOver, setGameOver] = useState(false);
 
-  const maxRounds = 30;
-
   const [magnetTopActive, setMagnetTopActive] = useState(true);
-  const [magnetPulse, setMagnetPulse] = useState(null);
 
   const runningRef = useRef(true);
+
+  // 🔥 FIX: no state for animation (prevents jumps)
+  const bgX = useRef(0);
+
+  const maxRounds = 30;
 
   useEffect(() => {
     const storedImage = localStorage.getItem("hyperloopImage");
@@ -47,7 +47,6 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     startRound();
   };
 
-  // 🏁 GAME OVER FIX
   const finishGame = () => {
     updateScore(score);
     markGameAsPlayed("minigame2");
@@ -55,6 +54,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     setGameOver(true);
   };
 
+  // 🚧 OBSTACLE MOVEMENT
   useEffect(() => {
     if (!running) return;
 
@@ -65,26 +65,39 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     return () => clearInterval(interval);
   }, [running, speed]);
 
+  // 🌄 PARALLAX (FIXED - no state, no jumps)
+  useEffect(() => {
+    if (!running) return;
+
+    let raf;
+
+    const loop = () => {
+      bgX.current -= speed;
+      raf = requestAnimationFrame(loop);
+    };
+
+    raf = requestAnimationFrame(loop);
+
+    return () => cancelAnimationFrame(raf);
+  }, [running, speed]);
+
   useEffect(() => {
     startRound();
   }, []);
 
+  // 🎮 INPUT
   useEffect(() => {
     const handleKey = (e) => {
       if (!runningRef.current) return;
 
       if (e.code === "ArrowUp") {
-        setIsBottom(false);
+        setIsBottom(true);
         setMagnetTopActive(true);
-        setMagnetPulse("switch");
-        setTimeout(() => setMagnetPulse(null), 120);
       }
 
       if (e.code === "ArrowDown") {
-        setIsBottom(true);
+        setIsBottom(false);
         setMagnetTopActive(false);
-        setMagnetPulse("switch");
-        setTimeout(() => setMagnetPulse(null), 120);
       }
     };
 
@@ -92,6 +105,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
+  // 💥 COLLISION
   useEffect(() => {
     if (!running) return;
 
@@ -99,7 +113,8 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     const playerCenter = window.innerWidth / 2;
 
     const xHit = Math.abs(obstacleCenter - playerCenter) < 25;
-    const yHit = isBottom === (obstacleLane === 1);
+    const obstacleIsBottom = obstacleLane === 0;
+    const yHit = isBottom === obstacleIsBottom;
 
     if (xHit) {
       if (yHit) {
@@ -124,29 +139,59 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
         <h1>Magnet Switch</h1>
         <h3>Ronde {round} / {maxRounds}</h3>
         <h3>Score: {score}</h3>
-        <h4 style={{ color: "#00ffff" }}>
-          Snelheid: {speed.toFixed(2)}x
-        </h4>
-        <p>Druk ↑ of ↓ om magneten te wisselen</p>
+        <h4 style={{ color: "#000000" }}> Snelheid: {speed.toFixed(2)}x </h4>
+        <p>↑ / ↓ om te wisselen</p>
       </div>
 
       <div className="game-wrapper2">
 
+        {/* 🌄 PARALLAX */}
+        <div className="parallax">
+
+          <div
+            className="layer layer-back"
+            style={{ transform: `translateX(${bgX.current * 0.05}px)` }}
+          />
+
+          <div
+            className="layer layer-mid-fardest"
+            style={{ transform: `translateX(${bgX.current * 0.25}px)` }}
+          />
+
+          <div
+            className="layer layer-mid-far"
+            style={{ transform: `translateX(${bgX.current * 0.3}px)` }}
+          />
+
+          <div
+            className="layer layer-mid"
+            style={{ transform: `translateX(${bgX.current * 0.5}px)` }}
+          />
+
+          <div
+            className="layer layer-front"
+            style={{ transform: `translateX(${bgX.current * 1.4}px)` }}
+          />
+
+        </div>
+
+        {/* OBSTACLE */}
         <div
           className="obstacle"
           style={{
             left: `${obstacleX}px`,
-            top: `${obstacleLane === 0 ? 40 : 200}px`,
-            transition: "top 0.25s ease"
+            bottom: obstacleLane === 0 ? "21vh" : "12vh",
           }}
         />
 
+        {/* PLAYER */}
         {image && (
           <div
             className="player-wrapper"
             style={{
-              top: isBottom ? "200px" : "40px",
-              transition: "top 0.25s ease"
+              bottom: isBottom ? "21vh" : "12vh",
+              transition: "bottom 0.2s ease",
+              zIndex: "0",
             }}
           >
             <img src={image} className="player" alt="hyperloop" />
@@ -160,12 +205,11 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
 
       </div>
 
-      {/* 🧨 MODAL GAME OVER */}
+      {/* GAME OVER */}
       {gameOver && (
         <div className="game-over-overlay">
           <div className="game-over-modal">
             <h2>Game Over</h2>
-
             <p>Score: {score}</p>
 
             <button
