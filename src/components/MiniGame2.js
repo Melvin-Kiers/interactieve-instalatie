@@ -15,7 +15,9 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const [round, setRound] = useState(1);
   const [gameOver, setGameOver] = useState(false);
 
-  const [magnetTopActive, setMagnetTopActive] = useState(true);
+  const [magnetTopActive, setMagnetTopActive] = useState(false);
+
+  const count = 50
 
   const runningRef = useRef(true);
 
@@ -180,7 +182,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
           className="obstacle"
           style={{
             left: `${obstacleX}px`,
-            bottom: obstacleLane === 0 ? "21vh" : "12vh",
+            bottom: obstacleLane === 0 ? "24vh" : "16vh",
           }}
         />
 
@@ -195,14 +197,25 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
             }}
           >
             <img src={image} className="player" alt="hyperloop" />
-
-            <div className="magnets">
-              <div className={`magnet top ${magnetTopActive ? "pulse" : ""}`} />
-              <div className={`magnet bottom ${!magnetTopActive ? "pulse" : ""}`} />
-            </div>
           </div>
         )}
 
+        <div className={`magnets ${!running ? "paused" : ""}`}>
+          {[...Array(count)].map((_, i) => (
+            <div
+              key={i}
+              className={`magnet top ${magnetTopActive ? "pulse" : ""}`}
+              style={{ left: `${i * 50}px` }}
+            />
+          ))}
+          {[...Array(count)].map((_, i) => (
+            <div
+              key={i}
+              className={`magnet bottom  ${!magnetTopActive ? "pulse" : ""}`}
+              style={{ left: `${i * 50}px` }}
+            />
+          ))}
+        </div>
       </div>
 
       {/* GAME OVER */}

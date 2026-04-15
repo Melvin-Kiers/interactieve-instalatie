@@ -462,20 +462,37 @@ canvas {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 4vw;
-  height: 4vh;
+  width: 20px;
+  height: 10px;
   background: #ccc;
-  border-radius: 10px;
+  border-radius: 4px;
   transition: all 0.15s ease;
   z-index: 1;
+  animation: slide 0.2s linear infinite;
+
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0vw); /* start off-screen right */
+  }
+  to {
+    transform: translateX(-100px); /* move past left */
+  }
+}
+
+.magnets.paused .magnet {
+  animation-play-state: paused;
 }
 
 .magnet.top {
-  top: -50px;
+  top: 70%;
+  background-repeat: repeat;
 }
 
 .magnet.bottom {
-  bottom: -50px;
+  bottom: 11%;
+  background-repeat: repeat;
 }
 
 .magnet.pulse {
