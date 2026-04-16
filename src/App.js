@@ -8,6 +8,8 @@ import GameHub from "./components/GameHub";
 import MiniGame1 from "./components/MiniGame1";
 import MiniGame2 from "./components/MiniGame2";
 
+import MiniGameIntro from "./components/MiniGameIntro";
+
 import "./css/App.css";
 
 export default function App() {
@@ -82,6 +84,13 @@ export default function App() {
             ) : (
               <Navigate to="/" />
             )
+          }
+        />
+
+        <Route
+          path="/test"
+          element={
+            <MiniGameIntro/>
           }
         />
 
