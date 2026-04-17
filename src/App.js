@@ -7,6 +7,7 @@ import GameHub from "./components/GameHub";
 
 import MiniGame1 from "./components/MiniGame1";
 import MiniGame2 from "./components/MiniGame2";
+import MiniGame3 from "./components/MiniGame3";
 import MiniGameIntro from "./components/MiniGameIntro";
 
 import "./css/App.css";
@@ -22,6 +23,10 @@ const MiniGameRouter = ({ updateScore, markGameAsPlayed }) => {
 
   if (id === "2") {
     return <MiniGame2 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
+  }
+
+  if (id === "3") {
+    return <MiniGame3 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
   }
 
   return <div>Game niet gevonden</div>;

@@ -5,13 +5,10 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
-
   const [round, setRound] = useState(1);
   const [maxRounds] = useState(5);
-
   const [running, setRunning] = useState(true);
   const [result, setResult] = useState(null);
-
   const [finalScore, setFinalScore] = useState(0);
 
   // 🚄 physics
@@ -33,7 +30,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
     if (storedImage) setImage(storedImage);
   }, []);
 
-  // 🚄 movement
+  // 🚄 movement logic
   useEffect(() => {
     if (!running) return;
 
@@ -51,7 +48,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
     return () => clearInterval(interval);
   }, [running, velocity]);
 
-  // ⚡ acceleration (only when not braking)
+  // ⚡ acceleration
   useEffect(() => {
     if (!running || brakeActive) return;
 
@@ -62,7 +59,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
     return () => clearInterval(interval);
   }, [running, brakeActive, baseSpeed]);
 
-  // 🧠 smooth braking (velocity + live speed display)
+  // 🧠 smooth braking & delayed scoring
   useEffect(() => {
     if (!brakeActive) return;
 
@@ -72,12 +69,15 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
 
         if (Math.abs(newV) < 0.05) {
           clearInterval(interval);
-
           setVelocity(0);
           setBrakeActive(false);
           setRunning(false);
 
-          finishRound();
+          // We berekenen de score pas HIER, op de uiteindelijke positie
+          setPosition((finalPos) => {
+            finishRound(finalPos);
+            return finalPos;
+          });
         }
 
         return newV;
@@ -107,8 +107,8 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
   // ⌨️ input
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.code === "Space" && running) {
-        startBrake();
+      if (e.code === "Space" && running && !brakeActive) {
+        setBrakeActive(true);
       }
     };
 
@@ -116,22 +116,16 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, [running, brakeActive]);
 
-  // 🛑 start braking
-  const startBrake = () => {
-    if (!running || brakeActive) return;
-    setBrakeActive(true);
-  };
-
-  // 🎯 scoring
-  const finishRound = () => {
+  // 🎯 scoring based on stop position
+  const finishRound = (stopPos) => {
     let points = 0;
 
-    if (position >= target.start && position <= target.end) {
+    if (stopPos >= target.start && stopPos <= target.end) {
       points = 100;
     } else {
       const dist = Math.min(
-        Math.abs(position - target.start),
-        Math.abs(position - target.end)
+        Math.abs(stopPos - target.start),
+        Math.abs(stopPos - target.end)
       );
 
       if (dist < 5) points = 70;
@@ -139,15 +133,17 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
       else points = 10;
     }
 
-    const newTotal = finalScore + points;
+    setFinalScore((prev) => {
+      const newTotal = prev + points;
+      
+      setResult({
+        round,
+        points,
+        total: newTotal,
+        finished: false,
+      });
 
-    setFinalScore(newTotal);
-
-    setResult({
-      round,
-      points,
-      total: newTotal,
-      finished: false,
+      return newTotal;
     });
   };
 
@@ -182,7 +178,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
         ⚡ Snelheid: {Math.round(velocity * 100)}km/u
       </div>
 
-      {/* 🎮 GAME BAR */}
+      {/* 🎮 GAME BAR - Met jouw originele klassen */}
       <div className="game-bar-wrapper">
         <div className="game-bar">
 
@@ -200,7 +196,10 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
             <img
               src={image}
               className="hyperloop-indicator"
-              style={{ left: `${position}%` }}
+              style={{ 
+                left: `${position}%`,
+                filter: brakeActive ? 'drop-shadow(0 0 8px red)' : 'none' 
+              }}
               alt="hyperloop"
             />
           )}
@@ -208,23 +207,23 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
       </div>
 
       {!result && (
-        <p>SPACE = remmen (velocity loopt nu smooth naar 0)</p>
+        <p>SPACE = remmen (hij rolt nu uit tot stilstand!)</p>
       )}
 
       {result && !result.finished && (
         <>
-          <h2>+{result.points} punten</h2>
+          <h2 className="mt-3">+{result.points} punten</h2>
           <h3>Totaal: {result.total}</h3>
 
           <button className="btn btn-success mt-3" onClick={nextRound}>
-            Volgende ronde
+            {round >= maxRounds ? "Resultaat bekijken" : "Volgende ronde"}
           </button>
         </>
       )}
 
       {result?.finished && (
         <>
-          <h2>🏁 Game voltooid!</h2>
+          <h2 className="mt-3">🏁 Game voltooid!</h2>
           <h3>Eindscore: {result.total}</h3>
 
           <button

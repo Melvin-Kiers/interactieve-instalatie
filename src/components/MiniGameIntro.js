@@ -9,6 +9,7 @@ const MiniGameIntro = () => {
   const navigate = useNavigate();
 
   const game = minigamesData.find(g => g.id === Number(id));
+  console.log("gevonden game:", game);
 
   if (!game) {
     return <div className="text-white text-center mt-5">Game niet gevonden</div>;

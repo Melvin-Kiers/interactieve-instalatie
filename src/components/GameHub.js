@@ -5,7 +5,7 @@ export default function GameHub({ username, score, playedGames }) {
 
   const games = [
     { id: 1, name: "Versnel de Hyperloop", route: "/games/uitleg/1" },
-    { id: 2, name: "Hyperloop Quiz", route: "/games/uitleg/2" },
+    { id: 2, name: "Magnet Switch", route: "/games/uitleg/2" },
     { id: 3, name: "Obstakels ontwijken", route: "/games/uitleg/3" },
   ];
 

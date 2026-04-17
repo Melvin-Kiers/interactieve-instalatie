@@ -577,3 +577,31 @@ canvas {
     opacity: 0.85;
   }
 }
+
+.stability-bar {
+  position: relative;
+  width: 120px;
+  height: 400px;
+  margin: 30px auto;
+  background: #0b2b3a;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.stability-zone {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 255, 0, 0.35);
+}
+
+.capsule {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 20px;
+  background: white;
+  border-radius: 6px;
+  transition: top 0.02s linear;
+}
