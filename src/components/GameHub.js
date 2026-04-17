@@ -4,9 +4,9 @@ export default function GameHub({ username, score, playedGames }) {
   const navigate = useNavigate();
 
   const games = [
-    { id: 1, name: "Versnel de Hyperloop", route: "/game/1" },
-    { id: 2, name: "Hyperloop Quiz", route: "/game/2" },
-    { id: 3, name: "Obstakels ontwijken", route: "/game/3" },
+    { id: 1, name: "Versnel de Hyperloop", route: "/games/uitleg/1" },
+    { id: 2, name: "Hyperloop Quiz", route: "/games/uitleg/2" },
+    { id: 3, name: "Obstakels ontwijken", route: "/games/uitleg/3" },
   ];
 
   return (

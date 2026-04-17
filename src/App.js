@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from "react-router-dom";
 
 import NameInput from "./components/NameInput";
 import HyperloopDesigner from "./components/HyperloopDesigner";
@@ -7,17 +7,35 @@ import GameHub from "./components/GameHub";
 
 import MiniGame1 from "./components/MiniGame1";
 import MiniGame2 from "./components/MiniGame2";
-
 import MiniGameIntro from "./components/MiniGameIntro";
 
 import "./css/App.css";
+
+
+// 🔁 Dynamische game router
+const MiniGameRouter = ({ updateScore, markGameAsPlayed }) => {
+  const { id } = useParams();
+
+  if (id === "1") {
+    return <MiniGame1 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
+  }
+
+  if (id === "2") {
+    return <MiniGame2 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
+  }
+
+  return <div>Game niet gevonden</div>;
+};
+
 
 export default function App() {
   const [username, setUsername] = useState(
     () => localStorage.getItem("username") || ""
   );
 
-  const [score, setScore] = useState(() => Number(localStorage.getItem("score")) || 0);
+  const [score, setScore] = useState(
+    () => Number(localStorage.getItem("score")) || 0
+  );
 
   const [playedGames, setPlayedGames] = useState(() => {
     return JSON.parse(localStorage.getItem("playedGames")) || [];
@@ -50,6 +68,8 @@ export default function App() {
       <div className="background-map"></div>
 
       <Routes>
+
+        {/* START */}
         <Route
           path="/"
           element={
@@ -61,6 +81,7 @@ export default function App() {
           }
         />
 
+        {/* DESIGNER */}
         <Route
           path="/designer"
           element={
@@ -72,6 +93,7 @@ export default function App() {
           }
         />
 
+        {/* GAME HUB */}
         <Route
           path="/games"
           element={
@@ -87,18 +109,24 @@ export default function App() {
           }
         />
 
+        {/* 🔥 NIEUWE STAP: INTRO PER GAME */}
         <Route
-          path="/test"
+          path="/games/uitleg/:id"
           element={
-            <MiniGameIntro/>
+            username ? (
+              <MiniGameIntro />
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
 
+        {/* 🔥 DYNAMISCHE GAME ROUTE */}
         <Route
-          path="/game/1"
+          path="/game/:id"
           element={
             username ? (
-              <MiniGame1 
+              <MiniGameRouter 
                 updateScore={updateScore}
                 markGameAsPlayed={markGameAsPlayed}
               />
@@ -108,19 +136,6 @@ export default function App() {
           }
         />
 
-        <Route
-          path="/game/2"
-          element={
-            username ? (
-              <MiniGame2 
-                updateScore={updateScore}
-                markGameAsPlayed={markGameAsPlayed}
-              />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
       </Routes>
     </Router>
   );

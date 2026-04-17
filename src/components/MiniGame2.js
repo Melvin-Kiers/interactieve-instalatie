@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Countdown from "./Countdown";
 
 export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
@@ -7,23 +8,23 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const [image, setImage] = useState(null);
   const [isBottom, setIsBottom] = useState(false);
 
-  const [obstacleLane, setObstacleLane] = useState(0);
-  const [obstacleX, setObstacleX] = useState(1200);
+  // 🌊 WAVE - Start ver buiten beeld om vroege hits te voorkomen
+  const [waveX, setWaveX] = useState(-1000);
+  const [waveLane, setWaveLane] = useState(0);
 
-  const [running, setRunning] = useState(true);
+  const [running, setRunning] = useState(false);
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(1);
   const [gameOver, setGameOver] = useState(false);
+  const [hasScored, setHasScored] = useState(false);
 
   const [magnetTopActive, setMagnetTopActive] = useState(false);
 
-  const count = 50
-
-  const runningRef = useRef(true);
-
-  // 🔥 FIX: no state for animation (prevents jumps)
+  const runningRef = useRef(false);
   const bgX = useRef(0);
+  const roundLock = useRef(false);
 
+  const count = 60;
   const maxRounds = 30;
 
   useEffect(() => {
@@ -35,18 +36,18 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     runningRef.current = running;
   }, [running]);
 
-  const baseSpeed = 3;
-  const speedMultiplier = 1 + Math.floor((round - 1) / 5) * 0.2;
+  const baseSpeed = 1;
+  const speedMultiplier = 1 + Math.floor((round - 1) / 2) * 0.25;
   const speed = baseSpeed * speedMultiplier;
 
-  const startRound = () => {
-    setObstacleLane(Math.floor(Math.random() * 2));
-    setObstacleX(window.innerWidth + 100);
-  };
+  const waveIsBottom = waveLane === 0;
 
-  const nextRound = () => {
-    setRound((r) => r + 1);
-    startRound();
+  // 🌊 spawn wave
+  const startRound = () => {
+    setWaveLane(Math.floor(Math.random() * 2));
+    // Spawn de wave rechts buiten het scherm
+    setWaveX(window.innerWidth + 200);
+    setHasScored(false);
   };
 
   const finishGame = () => {
@@ -56,36 +57,60 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     setGameOver(true);
   };
 
-  // 🚧 OBSTACLE MOVEMENT
+  // 🌊 WAVE MOVEMENT + ROUND CONTROL
   useEffect(() => {
     if (!running) return;
 
     const interval = setInterval(() => {
-      setObstacleX((x) => x - speed * 5);
+      setWaveX((x) => {
+        const newX = x - speed * 6;
+
+        // 🌊 wave volledig voorbij de linkerkant -> volgende ronde
+        if (newX < -200 && !roundLock.current) {
+          roundLock.current = true;
+
+          if (round >= maxRounds) {
+             finishGame();
+             return -200;
+          }
+
+          setRound((r) => r + 1);
+          startRound();
+
+          setTimeout(() => {
+            roundLock.current = false;
+          }, 50);
+
+          return window.innerWidth + 200;
+        }
+
+        return newX;
+      });
     }, 16);
 
     return () => clearInterval(interval);
-  }, [running, speed]);
+  }, [running, speed, round]);
 
-  // 🌄 PARALLAX (FIXED - no state, no jumps)
+  // 🌄 PARALLAX
   useEffect(() => {
     if (!running) return;
 
     let raf;
-
     const loop = () => {
       bgX.current -= speed;
       raf = requestAnimationFrame(loop);
     };
 
     raf = requestAnimationFrame(loop);
-
     return () => cancelAnimationFrame(raf);
   }, [running, speed]);
 
+  // 🎮 START NA COUNTDOWN
   useEffect(() => {
-    startRound();
-  }, []);
+    if (running) {
+        startRound();
+    }
+  }, [running]);
 
   // 🎮 INPUT
   useEffect(() => {
@@ -111,78 +136,61 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   useEffect(() => {
     if (!running) return;
 
-    const obstacleCenter = obstacleX + 30;
-    const playerCenter = window.innerWidth / 2;
+    // Alleen checken als de wave daadwerkelijk in beeld is
+    if (waveX > window.innerWidth || waveX < -150) return;
 
-    const xHit = Math.abs(obstacleCenter - playerCenter) < 25;
-    const obstacleIsBottom = obstacleLane === 0;
-    const yHit = isBottom === obstacleIsBottom;
+    const playerCenter = window.innerWidth / 2;
+    const waveCenter = waveX + 60;
+    const xHit = Math.abs(waveCenter - playerCenter) < 50;
+    const correctLane = isBottom === waveIsBottom;
 
     if (xHit) {
-      if (yHit) {
+      if (correctLane) {
         finishGame();
-      } else {
-        setScore((s) => s + 100);
-
-        if (round >= maxRounds) {
-          finishGame();
-        } else {
-          nextRound();
-        }
+      } else if (!hasScored) {
+        setScore((s) => s + 5);
+        setHasScored(true);
       }
     }
-  }, [obstacleX, isBottom, obstacleLane, round, running]);
+  }, [waveX, isBottom, waveIsBottom, running, hasScored]);
 
   return (
     <div className="container text-center">
 
-      {/* HUD */}
+      {!running && !gameOver && (
+        <Countdown onComplete={() => setRunning(true)} />
+      )}
+
       <div className="text-section-game-2">
         <h1>Magnet Switch</h1>
         <h3>Ronde {round} / {maxRounds}</h3>
         <h3>Score: {score}</h3>
-        <h4 style={{ color: "#000000" }}> Snelheid: {speed.toFixed(2)}x </h4>
+        <h4>Snelheid: {speed.toFixed(2)}x</h4>
         <p>↑ / ↓ om te wisselen</p>
       </div>
 
       <div className="game-wrapper2">
 
-        {/* 🌄 PARALLAX */}
         <div className="parallax">
-
-          <div
-            className="layer layer-back"
-            style={{ transform: `translateX(${bgX.current * 0.05}px)` }}
-          />
-
-          <div
-            className="layer layer-mid-fardest"
-            style={{ transform: `translateX(${bgX.current * 0.25}px)` }}
-          />
-
-          <div
-            className="layer layer-mid-far"
-            style={{ transform: `translateX(${bgX.current * 0.3}px)` }}
-          />
-
-          <div
-            className="layer layer-mid"
-            style={{ transform: `translateX(${bgX.current * 0.5}px)` }}
-          />
-
-          <div
-            className="layer layer-front"
-            style={{ transform: `translateX(${bgX.current * 1.4}px)` }}
-          />
-
+          <div className="layer layer-back"
+            style={{ transform: `translateX(${bgX.current * 0.05}px)` }} />
+          <div className="layer layer-mid-fardest"
+            style={{ transform: `translateX(${bgX.current * 0.25}px)` }} />
+          <div className="layer layer-mid-far"
+            style={{ transform: `translateX(${bgX.current * 0.3}px)` }} />
+          <div className="layer layer-mid"
+            style={{ transform: `translateX(${bgX.current * 0.5}px)` }} />
+          <div className="layer layer-front"
+            style={{ transform: `translateX(${bgX.current * 1.4}px)` }} />
         </div>
 
-        {/* OBSTACLE */}
+        {/* 🌊 WAVE */}
         <div
-          className="obstacle"
+          className="pressure-wave"
           style={{
-            left: `${obstacleX}px`,
-            bottom: obstacleLane === 0 ? "24vh" : "16vh",
+            left: `${waveX}px`,
+            bottom: waveIsBottom ? "21vh" : "12vh",
+            display: waveX < -500 ? 'none' : 'block' // Verberg als hij nog op de wachtpositie staat
           }}
         />
 
@@ -193,38 +201,37 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
             style={{
               bottom: isBottom ? "21vh" : "12vh",
               transition: "bottom 0.2s ease",
-              zIndex: "0",
             }}
           >
             <img src={image} className="player" alt="hyperloop" />
           </div>
         )}
 
+        {/* MAGNETS */}
         <div className={`magnets ${!running ? "paused" : ""}`}>
           {[...Array(count)].map((_, i) => (
             <div
-              key={i}
+              key={`top-${i}`}
               className={`magnet top ${magnetTopActive ? "pulse" : ""}`}
               style={{ left: `${i * 50}px` }}
             />
           ))}
           {[...Array(count)].map((_, i) => (
             <div
-              key={i}
-              className={`magnet bottom  ${!magnetTopActive ? "pulse" : ""}`}
+              key={`bottom-${i}`}
+              className={`magnet bottom ${!magnetTopActive ? "pulse" : ""}`}
               style={{ left: `${i * 50}px` }}
             />
           ))}
         </div>
+
       </div>
 
-      {/* GAME OVER */}
       {gameOver && (
         <div className="game-over-overlay">
           <div className="game-over-modal">
             <h2>Game Over</h2>
-            <p>Score: {score}</p>
-
+            <p>Eindscore: {score}</p>
             <button
               className="btn btn-primary mt-3"
               onClick={() => navigate("/games")}

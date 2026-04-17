@@ -1,15 +1,31 @@
 import React from 'react';
+import { useParams, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/MiniGameIntro.css';
+import minigamesData from '../data/minigamesData';
 
 const MiniGameIntro = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const game = minigamesData.find(g => g.id === Number(id));
+
+  if (!game) {
+    return <div className="text-white text-center mt-5">Game niet gevonden</div>;
+  }
+
   return (
     <div className="minigame-wrapper bg">
       <div className="container-fluid h-100 p-0">
         <div className="row g-0 h-100">          
+
+          {/* LINKERKANT */}
           <div className="col-md-8 d-flex flex-column align-items-center justify-content-center position-relative">            
             <div className="white-card shadow-lg d-flex flex-column align-items-center p-0">
-                <h1 className="display-4 fw-bold mb-4 main-title">Magnet Switch</h1>
+              
+              <h1 className="display-4 fw-bold mb-4 main-title">
+                {game.title}
+              </h1>
               
               <div className="video-overflow-container">
                 <video 
@@ -19,22 +35,22 @@ const MiniGameIntro = () => {
                   loop 
                   playsInline
                 >
-                  <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-green-landscape-with-hills-and-clouds-41315-large.mp4" type="video/mp4" />
+                  <source src={game.video} type="video/mp4" />
                 </video>
               </div>
 
               <div className="card-content-bottom p-5 text-center">
                 <p className="description-text">
-                  Nadat alle minigames zijn gespeeld krijgen de gebruikers/kinderen een overzicht 
-                  met daarin een overall score en zien ze hun eerdere gemaakte Hyperloop rijden. 
-                  (dit kan op een kaart zijn of gewoon los) Hier krijg je nog extra info te zien 
-                  over alles wat eerder gedaan is zoals de magneten, snelheid, etc.
+                  {game.description}
                 </p>
               </div>
+
             </div>
           </div>
 
+          {/* RECHTERKANT */}
           <div className="col-md-4 sidebar-custom d-flex flex-column p-5">
+            
             <div className="flex-grow-1">
               <h2 className="text-white text-center mb-0">Besturing</h2>
               <div className="divider my-2"></div>
@@ -53,10 +69,14 @@ const MiniGameIntro = () => {
             </div>
 
             <div className="mb-4">
-              <button className="btn-start w-100 py-3 shadow-lg">
+              <button 
+                className="btn-start w-100 py-3 shadow-lg"
+                onClick={() => navigate(`/game/${id}`)}
+              >
                 Start (ENTER)
               </button>
             </div>
+
           </div>
 
         </div>
