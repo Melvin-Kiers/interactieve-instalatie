@@ -1,0 +1,178 @@
+/* ACHTERGROND */
+.hyperloop-choice-bg {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #0f1c2e, #00000000); 
+  color: white;
+}
+
+/* TITEL */
+.designer-header h1 {
+  text-align: center;
+  font-weight: 400;
+}
+
+.designer-header h1 span {
+  color: #4da3ff;
+}
+
+/* GLASS CARD */
+.glass-card {
+  margin: 40px auto;
+  padding: 30px;
+  /* max-width: 800px; */
+
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* CANVAS CONTAINER */
+.preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+  border-radius: 16px;
+
+  background: radial-gradient(circle, rgba(77,163,255,0.2), transparent);
+}
+
+/* CANVAS */
+canvas {
+  border-radius: 12px;
+  background: transparent;
+
+  transition: transform 0.3s ease;
+}
+
+/* canvas:hover {
+  transform: scale(1.02);
+} */
+
+/* COLOR PICKER */
+.color-picker {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* GROUP */
+.color-group p {
+  margin-bottom: 8px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* COLOR DOTS */
+.color-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.color-circle:hover {
+  transform: scale(1.2);
+}
+
+.color-circle.selected {
+  border: 2px solid white;
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* BUTTON */
+.submit-btn {
+  margin-top: 30px;
+  padding: 14px 28px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: linear-gradient(135deg, #4da3ff, #0066ff);
+  color: white;
+
+  font-size: 16px;
+  cursor: pointer;
+
+  box-shadow: 0 10px 30px rgba(0,102,255,0.4);
+  transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+}
+
+.color-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+
+  transition: all 0.2s ease;
+}
+
+.color-circle:hover {
+  transform: scale(1.2);
+}
+
+.color-circle.selected {
+  border: 2px solid white;
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* 🌈 RAINBOW PICKER */
+.rainbow-picker {
+  background: conic-gradient(
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    violet,
+    red
+  );
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+/* verberg default input */
+.rainbow-picker input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.preview-container {
+  position: relative;
+  width: 600px; /* Moet gelijk zijn aan canvasWidth */
+  height: 200px; /* Moet gelijk zijn aan canvasHeight */
+  margin: 20px auto;
+  background-color: white; /* Zodat je ziet waar je tekent */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  /* Dit zorgt dat ze precies op elkaar vallen */
+  top: 0;
+  left: 0;
+}
+
+.result-image {
+    width: 100% !important;
+    height: auto;
+}

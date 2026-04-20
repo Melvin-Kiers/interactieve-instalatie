@@ -51,8 +51,8 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   };
 
   const finishGame = () => {
-    updateScore(score);
-    markGameAsPlayed("minigame2");
+    // updateScore(score);
+    // markGameAsPlayed(2);
     setRunning(false);
     setGameOver(true);
   };
@@ -199,7 +199,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
           <div
             className="player-wrapper"
             style={{
-              bottom: isBottom ? "21vh" : "12vh",
+              bottom: isBottom ? "18vh" : "9vh",
               transition: "bottom 0.2s ease",
             }}
           >
@@ -232,9 +232,17 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
           <div className="game-over-modal">
             <h2>Game Over</h2>
             <p>Eindscore: {score}</p>
+            
             <button
               className="btn btn-primary mt-3"
-              onClick={() => navigate("/games")}
+              onClick={() => {
+                // Eerst de data opslaan...
+                updateScore(score);
+                markGameAsPlayed(2); 
+                
+                // ...en dan pas weg navigeren
+                navigate("/games");
+              }}
             >
               Terug naar GameHub
             </button>

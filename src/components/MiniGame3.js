@@ -109,7 +109,6 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     return () => clearInterval(interval);
   }, [running, result, zonePos, zoneVelocity, anchorPoint, round]);
 
-  // 🎮 Capsule Physics loop
   useEffect(() => {
     if (!running) return;
 
@@ -167,7 +166,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const nextRound = () => {
     if (round >= maxRounds) {
       updateScore(finalScore);
-      markGameAsPlayed("minigame3");
+      markGameAsPlayed(3);
       setResult({ finished: true, total: finalScore });
     } else {
       setRound((r) => r + 1);
@@ -176,7 +175,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
 
   return (
     <div className="container text-center mt-4">
-      <h1>Magnetic Stability Control 🧲</h1>
+      <h1>Magnetic Stability Control</h1>
       <h3 className="mb-0">Ronde {round} / {maxRounds}</h3>
 
       <div className={`timer-display ${timer < 1.5 ? "text-danger animate-pulse" : ""}`} 
@@ -187,7 +186,6 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
       <div className="game-bar-wrapper">
         <div className="game-bar" style={{ position: 'relative', height: '110px', backgroundColor: '#ddd', borderRadius: '15px' }}>
           
-          {/* Rode en Oranje zones bewegen mee met zonePos */}
           <div style={{ position: 'absolute', height: '100%', left: `${zonePos - 10}%`, width: '10%', backgroundColor: 'rgba(255, 0, 0, 0.2)', borderRadius: '5px' }} />
           <div style={{ position: 'absolute', height: '100%', left: `${zonePos - 5}%`, width: '5%', backgroundColor: 'rgba(255, 165, 0, 0.3)' }} />
 
@@ -226,7 +224,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
         {!result ? (
           <p>
             Houd de capsule stabiel! Het magnetisch veld schommelt.<br/>
-            <strong>SPATIE / RECHTS</strong> = Gas geven 🚀
+            <strong>SPATIE / RECHTS</strong> = Gas geven
           </p>
         ) : !result.finished ? (
           <div className="result-area">
@@ -240,7 +238,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
           </div>
         ) : (
           <div className="final-area">
-            <h2>🏁 Test voltooid!</h2>
+            <h2>Test voltooid!</h2>
             <h3 className="display-4">{result.total} punten</h3>
             <button className="btn btn-primary btn-lg mt-3" onClick={() => navigate("/games")}>
               Terug naar GameHub

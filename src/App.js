@@ -9,25 +9,23 @@ import MiniGame1 from "./components/MiniGame1";
 import MiniGame2 from "./components/MiniGame2";
 import MiniGame3 from "./components/MiniGame3";
 import MiniGameIntro from "./components/MiniGameIntro";
+import Leaderboard from "./components/Leaderboard";
 
 import "./css/App.css";
 
 
 // 🔁 Dynamische game router
-const MiniGameRouter = ({ updateScore, markGameAsPlayed }) => {
+const MiniGameRouter = ({ updateScore, markGameAsPlayed, playedGames }) => {
   const { id } = useParams();
+  const gameId = parseInt(id);
 
-  if (id === "1") {
-    return <MiniGame1 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
+  if (playedGames.includes(gameId)) {
+    return <Navigate to="/games" />;
   }
 
-  if (id === "2") {
-    return <MiniGame2 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
-  }
-
-  if (id === "3") {
-    return <MiniGame3 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
-  }
+  if (id === "1") return <MiniGame1 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
+  if (id === "2") return <MiniGame2 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
+  if (id === "3") return <MiniGame3 updateScore={updateScore} markGameAsPlayed={markGameAsPlayed} />;
 
   return <div>Game niet gevonden</div>;
 };
@@ -58,11 +56,28 @@ export default function App() {
     localStorage.setItem("playedGames", JSON.stringify(updated));
   };
 
+  const saveFinalScoreToLeaderboard = () => {
+    const existingScores = JSON.parse(localStorage.getItem("globalLeaderboard")) || [];
+    
+    const newEntry = {
+      name: username,
+      score: score,
+      pod: localStorage.getItem("hyperloopImage"),
+      date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+    };
+
+    const updatedLeaderboard = [...existingScores, newEntry];
+    localStorage.setItem("globalLeaderboard", JSON.stringify(updatedLeaderboard));
+  };
+
   const handleReset = () => {
+    // Wis alle speler-specifieke data uit localStorage
     localStorage.removeItem("username");
     localStorage.removeItem("score");
     localStorage.removeItem("playedGames");
+    localStorage.removeItem("hyperloopImage"); // Ook het design wissen voor de volgende
 
+    // Reset de state naar de beginwaarden
     setUsername("");
     setScore(0);
     setPlayedGames([]);
@@ -73,8 +88,6 @@ export default function App() {
       <div className="background-map"></div>
 
       <Routes>
-
-        {/* START */}
         <Route
           path="/"
           element={
@@ -86,7 +99,6 @@ export default function App() {
           }
         />
 
-        {/* DESIGNER */}
         <Route
           path="/designer"
           element={
@@ -98,7 +110,6 @@ export default function App() {
           }
         />
 
-        {/* GAME HUB */}
         <Route
           path="/games"
           element={
@@ -107,6 +118,7 @@ export default function App() {
                 username={username}
                 score={score}
                 playedGames={playedGames}
+                saveToLeaderboard={saveFinalScoreToLeaderboard}
               />
             ) : (
               <Navigate to="/" />
@@ -114,19 +126,11 @@ export default function App() {
           }
         />
 
-        {/* 🔥 NIEUWE STAP: INTRO PER GAME */}
         <Route
           path="/games/uitleg/:id"
-          element={
-            username ? (
-              <MiniGameIntro />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
+          element={username ? <MiniGameIntro /> : <Navigate to="/" />}
         />
 
-        {/* 🔥 DYNAMISCHE GAME ROUTE */}
         <Route
           path="/game/:id"
           element={
@@ -134,12 +138,16 @@ export default function App() {
               <MiniGameRouter 
                 updateScore={updateScore}
                 markGameAsPlayed={markGameAsPlayed}
+                playedGames={playedGames}
               />
             ) : (
               <Navigate to="/" />
             )
           }
         />
+
+        {/* ✅ Geef handleReset door aan het Leaderboard */}
+        <Route path="/leaderboard" element={<Leaderboard onReset={handleReset} />} />
 
       </Routes>
     </Router>

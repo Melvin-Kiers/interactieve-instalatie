@@ -1,0 +1,117 @@
+@font-face {
+    font-family: 'safiro-medium';
+    src: url('../assets/fonts/safiro-medium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GeneralSans-Bold';
+    src: url('../assets/fonts/GeneralSans-Bold.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.lb-page-wrapper {
+  min-height: 100vh;
+  background: radial-gradient(circle at center, #1a1a2e47 0%, #0f0f1a48 100%);
+  color: white;
+}
+
+.lb-title {
+  text-align: center;
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: 5px;
+  /* text-shadow: 0 0 20px rgba(0, 255, 255, 0.6); */
+  margin-bottom: 2rem;
+  font-family: 'GeneralSans-Bold', Arial, sans-serif;
+}
+
+/* Podium Cards */
+.podium-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(0, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.podium-card:hover {
+  transform: translateY(-10px);
+  border-color: #00ffff;
+}
+
+.pod-display-large {
+  width: 100%;
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.4));
+  margin-bottom: 15px;
+}
+
+.rank-badge {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  background: #00ffff;
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.5rem;
+  box-shadow: 0 0 15px #00ffff;
+}
+
+.rank-1 .podium-card { border-color: gold; box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); }
+.rank-1 .rank-badge { background: gold; box-shadow: 0 0 20px gold; }
+
+/* Tabel Stijlen */
+.lb-glass-container {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lb-table {
+  color: white !important;
+  vertical-align: middle;
+}
+
+.pod-mini {
+  width: auto;
+  height: 5vh;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.text-cyan { color: #00ffff; font-weight: bold; }
+.lb-date { font-size: 0.8rem; opacity: 0.5; }
+
+/* De Grote Herstart Knop */
+.btn-restart-neon {
+  background: transparent;
+  border: 3px solid #00ffff;
+  color: #00ffff;
+  padding: 20px 50px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.btn-restart-neon:hover {
+  background: #00ffff;
+  color: #000;
+  box-shadow: 0 0 40px #00ffff;
+}
+

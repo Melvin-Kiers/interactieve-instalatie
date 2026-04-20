@@ -1,0 +1,70 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+export default function Leaderboard({ onReset }) {
+  const leaderboardData = JSON.parse(localStorage.getItem("globalLeaderboard")) || [];
+  const sortedPlayers = [...leaderboardData].sort((a, b) => b.score - a.score);
+
+  const handleRestart = () => {
+    if (onReset) onReset();
+    window.location.href = "/";
+  };
+
+  return (
+    <div className="lb-page-wrapper">
+      <div className="container py-5">
+        <div className="col-12">
+            <h1 className="lb-title mb-5">Leaderboard</h1>
+            
+            {/* TOP 3 SECTIE */}
+            <div className="row justify-content-center mb-5 mt-4">
+            {sortedPlayers.slice(0, 3).map((player, index) => (
+                <div key={index} className={`col-md-4 mb-4 podium-slot rank-${index + 1}`}>
+                <div className="podium-card">
+                    <div className="rank-badge">{index + 1}</div>
+                    <img src={player.pod} alt="pod" className="pod-display-large" />
+                    <h2 className="player-name-large">{player.name}</h2>
+                    <div className="score-tag">{player.score} Punten</div>
+                    <p className=" italic">{player.date}</p>
+                </div>
+            </div>
+            ))}
+          </div>
+        
+
+            {/* OVERIGE SPELERS TABEL */}
+          <div className="lb-glass-container">
+            <table className="table lb-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Design</th>
+                    <th>Naam</th>
+                    <th>Score</th>
+                    <th>Datum</th>
+                </tr>
+                </thead>
+                <tbody>
+                {sortedPlayers.slice(3).map((player, index) => (
+                    <tr key={index + 3}>
+                    <td>{index + 4}</td>
+                    <td><img src={player.pod} alt="pod" className="pod-mini" /></td>
+                    <td>{player.name}</td>
+                    <td className="text-cyan">{player.score}</td>
+                    <td className="lb-date">{player.date}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="text-center mt-5">
+          <button className="btn-restart-neon" onClick={handleRestart}>
+            NIEUWE MISSIE STARTEN
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

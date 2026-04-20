@@ -153,7 +153,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
 
     if (round >= maxRounds) {
       updateScore(finalScore);
-      markGameAsPlayed("minigame1");
+      markGameAsPlayed(1);
 
       setResult({
         finished: true,
@@ -169,7 +169,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
 
   return (
     <div className="container text-center mt-4">
-      <h1>Versnel de Hyperloop 🚄</h1>
+      <h1>Versnel de Hyperloop</h1>
 
       <h3>Ronde {round} / {maxRounds}</h3>
 
