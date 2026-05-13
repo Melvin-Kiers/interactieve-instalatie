@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import hyperloopBgGame3 from "../assets/bg-minigame-3.png";
 
 export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
@@ -174,7 +175,9 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   };
 
   return (
-    <div className="container text-center mt-4">
+    <>
+    <img src={hyperloopBgGame3} className="bg-image-game-3" />
+    <div className="text-center mt-4">
       <h1>Magnetic Stability Control</h1>
       <h3 className="mb-0">Ronde {round} / {maxRounds}</h3>
 
@@ -183,8 +186,8 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
         {timer}s
       </div>
 
-      <div className="game-bar-wrapper">
-        <div className="game-bar" style={{ position: 'relative', height: '110px', backgroundColor: '#ddd', borderRadius: '15px' }}>
+      <div className="game-bar-wrapper3">
+        <div className="game-bar3">
           
           <div style={{ position: 'absolute', height: '100%', left: `${zonePos - 10}%`, width: '10%', backgroundColor: 'rgba(255, 0, 0, 0.2)', borderRadius: '5px' }} />
           <div style={{ position: 'absolute', height: '100%', left: `${zonePos - 5}%`, width: '5%', backgroundColor: 'rgba(255, 165, 0, 0.3)' }} />
@@ -227,7 +230,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
             <strong>SPATIE / RECHTS</strong> = Gas geven
           </p>
         ) : !result.finished ? (
-          <div className="result-area">
+          <div className="minigame3-result result-area">
             <h2 className={result.points === 100 ? "text-success" : "text-primary"}>
               {result.points === 100 ? "Perfecte Stabiliteit!" : `+${result.points} punten`}
             </h2>
@@ -247,5 +250,6 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
         )}
       </div>
     </div>
+    </>
   );
 }

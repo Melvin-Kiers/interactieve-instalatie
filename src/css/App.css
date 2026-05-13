@@ -319,24 +319,6 @@ canvas {
   transform: none;
 }
 
-.game-bar-wrapper {
-  position: relative;
-  width: 100vw;
-}
-
-.game-bar {
-  position: relative;
-  width: 100vw;
-  height: 240px;
-  overflow: hidden;
-
-  /* jouw buis afbeelding */
-  background-image: url("/src/assets/HyperloopPipe.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 .perfect-zone {
   position: absolute;
   left: 45%;
@@ -684,7 +666,6 @@ canvas {
 
 .leaderboard-overlay {
   position: absolute;
-  /* width: 50vw; */
   height: 17.5vh;
   bottom: 17.5%;
   left: 50%;
@@ -697,4 +678,94 @@ canvas {
   color: white;
   font-weight: 600;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+.bg-image-game-1 {
+  height: 100vh;
+  width: 100vw;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+}
+
+.game-bar-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  z-index: -1;
+}
+
+.game-bar {
+  position: absolute;
+  bottom: 12.5%;
+  left: 0;
+
+  width: 100%;
+  height: 180px;
+
+  overflow: hidden;
+
+  background-image: url("/src/assets/HyperloopPipe.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.game-screen {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  color: white;
+}
+
+.minigame1-result {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px 30px;
+  border-radius: 12px;
+  color: white;
+}
+
+.game-bar-wrapper3 {
+  position: relative;
+  width: 100%;
+  z-index: -1;
+  min-height: 55vh;
+}
+
+.game-bar3 {
+  position: absolute;
+  bottom: 12.5%;
+  left: 0;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background-image: url("/src/assets/HyperloopPipe.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.bg-image-game-3 {
+  height: 100vh;
+  width: 100vw;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+}
+
+.minigame3-result {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px 30px;
+  border-radius: 12px;
+  color: white;
 }

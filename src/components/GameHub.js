@@ -13,10 +13,8 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
     { id: 3, name: "Obstakels ontwijken", route: "/games/uitleg/3" },
   ];
 
-  // --- DEZE REGELS MOETEN HIER STAAN (boven de return) ---
   const allGamesPlayed = playedGames.length >= games.length;
   const hyperloopImg = localStorage.getItem("hyperloopImage");
-  // ------------------------------------------------------
 
   useEffect(() => {
     const handleKeyDown = (e) => {

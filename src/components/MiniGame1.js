@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import hyperloopBgGame1 from "../assets/bg-minigame-1.png";
 
 export default function MiniGame1({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
@@ -168,7 +169,9 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
   };
 
   return (
-    <div className="container text-center mt-4">
+    <>
+    <img src={hyperloopBgGame1} className="bg-image-game-1" />
+    <div className="game-screen text-center">
       <h1>Versnel de Hyperloop</h1>
 
       <h3>Ronde {round} / {maxRounds}</h3>
@@ -212,12 +215,14 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
 
       {result && !result.finished && (
         <>
+        <div className="minigame1-result">
           <h2 className="mt-3">+{result.points} punten</h2>
           <h3>Totaal: {result.total}</h3>
 
           <button className="btn btn-success mt-3" onClick={nextRound}>
             {round >= maxRounds ? "Resultaat bekijken" : "Volgende ronde"}
           </button>
+        </div>
         </>
       )}
 
@@ -235,5 +240,6 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
         </>
       )}
     </div>
+    </>
   );
 }
