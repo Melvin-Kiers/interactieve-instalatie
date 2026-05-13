@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import "../css/Leaderboard.css";
+import hyperloopBg from "../assets/img/HyperloopGameScreen.png";
+import video from "../assets/videos/bg-video.mp4";
+import { useEffect } from "react";
 
 export default function GameHub({ username, score, playedGames, saveToLeaderboard }) {
   const navigate = useNavigate();
@@ -15,39 +18,75 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
   const hyperloopImg = localStorage.getItem("hyperloopImage");
   // ------------------------------------------------------
 
-  return (
-    <div className="container">
-      <h1>Welkom {username}</h1>
-      <h2>Score: {score} ⭐</h2>
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const isPlayed = (id) => playedGames.includes(id);
 
-      <div className="game-grid">
-        {games.map((game) => {
-          const isPlayed = playedGames.includes(game.id);
-          return (
-            <div
-              key={game.id}
-              className={`game-card ${isPlayed ? "disabled" : ""}`}
-              onClick={() => !isPlayed && navigate(game.route)}
-            >
-              <h2>{game.name}</h2>
-              {isPlayed ? <p>✅ Al gespeeld</p> : <p>Klik om te spelen</p>}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Hieronder gebruik je de variabelen weer */}
-      {allGamesPlayed && (
-        <button 
-          className="btn btn-warning" 
-          onClick={() => {
+      switch (e.key) {
+        case "1":
+          if (!isPlayed(1)) navigate("/games/uitleg/1");
+          break;
+        case "2":
+          if (!isPlayed(2)) navigate("/games/uitleg/2");
+          break;
+        case "3":
+          if (!isPlayed(3)) navigate("/games/uitleg/3");
+          break;
+        case "4":
+          if (allGamesPlayed) {
             saveToLeaderboard();
             navigate("/leaderboard");
-          }}
-        >
-          Bekijk Klassement 🏆
-        </button>
-      )}
-    </div>
+          }
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigate, playedGames]);
+
+
+  return (
+    <section className="game-hub">
+      <div className="container">
+        <img src={hyperloopBg} className="bg-image-game" />
+        <video className="bg-video" src={video} autoPlay loop muted playsInline/>
+
+        <div className="welcome-grid">
+          <h1>Welkom in je Hyperloop, {username}</h1>
+          <h2>Score: {score} ⭐</h2>
+        </div>
+
+        <div className="game-grid">
+          {games.map((game) => {
+            const isPlayed = playedGames.includes(game.id);
+            return (
+              <div
+                key={game.id}
+                className={`game-card ${isPlayed ? "disabled" : ""}`}
+                onClick={() => !isPlayed && navigate(game.route)}
+              >
+                <h2>{game.name}</h2>
+                {isPlayed ? <p>✅ Al gespeeld</p> : <p>Klik om te spelen</p>}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Hieronder gebruik je de variabelen weer */}
+        {allGamesPlayed && (
+          <button 
+            className="col-6 leaderboard-overlay btn btn-warning" 
+            onClick={() => {
+              saveToLeaderboard();
+              navigate("/leaderboard");
+            }}
+          >
+            Bekijk Klassement 🏆
+          </button>
+        )}
+      </div>
+    </section>
   );
 }
