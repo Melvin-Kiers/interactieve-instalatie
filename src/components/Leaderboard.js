@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import icon from "../assets/icons/star.png";
+import rankIcon from "../assets/icons/trophy.png";
 
 export default function Leaderboard({ onReset }) {
   const leaderboardData = JSON.parse(localStorage.getItem("globalLeaderboard")) || [];
@@ -37,21 +39,35 @@ export default function Leaderboard({ onReset }) {
             <table className="table lb-table">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Design</th>
+                    <th>Plaats</th>
+                    <th></th>
                     <th>Naam</th>
-                    <th>Score</th>
                     <th>Datum</th>
+                    <th>Punten</th>
                 </tr>
                 </thead>
                 <tbody>
                 {sortedPlayers.slice(3).map((player, index) => (
                     <tr key={index + 3}>
-                    <td>{index + 4}</td>
+                    <td>
+                      {index + 4 >= 4 && (
+                        <img 
+                          src={rankIcon} 
+                          alt="" 
+                          className="rank-icon"
+                        />
+                      )}
+                      {index + 4}
+                    </td>
                     <td><img src={player.pod} alt="pod" className="pod-mini" /></td>
                     <td>{player.name}</td>
-                    <td className="text-cyan">{player.score}</td>
-                    <td className="lb-date">{player.date}</td>
+                    <td>{player.date}</td>
+                    <td className="lb-score">
+                      <span className="score-badge">
+                        <img src={icon} alt="" className="score-icon" />
+                        {player.score}
+                      </span>
+                    </td>
                     </tr>
                 ))}
                 </tbody>

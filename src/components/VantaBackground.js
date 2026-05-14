@@ -18,11 +18,10 @@ export default function VantaBackground() {
       scale: 1,
       scaleMobile: 1,
 
-      // 🎨 jouw kleuren (CORRECT FORMAT)
       color: 0xf6653a,
       color2: 0x3a1509,
-      backgroundColor: 0x000000,
-      size: 1.3,
+      backgroundColor: 0x240021,
+      size: 1,
     });
 
     return () => {
