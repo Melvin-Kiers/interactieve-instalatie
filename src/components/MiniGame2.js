@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Countdown from "./Countdown";
+import video from "../assets/videos/bg-video.mp4";
+import backgroundMusic from "../assets/sounds/minigame2.mp3";
 
 export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
@@ -8,7 +10,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const [image, setImage] = useState(null);
   const [isBottom, setIsBottom] = useState(false);
 
-  // 🌊 WAVE - Start ver buiten beeld om vroege hits te voorkomen
+  // 🌊 WAVE
   const [waveX, setWaveX] = useState(-1000);
   const [waveLane, setWaveLane] = useState(0);
 
@@ -17,6 +19,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const [round, setRound] = useState(1);
   const [gameOver, setGameOver] = useState(false);
   const [hasScored, setHasScored] = useState(false);
+  const [isHit, setIsHit] = useState(false);
 
   const [magnetTopActive, setMagnetTopActive] = useState(false);
 
@@ -25,7 +28,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const roundLock = useRef(false);
 
   const count = 60;
-  const maxRounds = 30;
+  const maxRounds = 5;
 
   useEffect(() => {
     const storedImage = localStorage.getItem("hyperloopImage");
@@ -36,23 +39,24 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     runningRef.current = running;
   }, [running]);
 
+  // Snelheid berekeningen
   const baseSpeed = 1;
-  const speedMultiplier = 1 + Math.floor((round - 1) / 2) * 0.25;
+  const steps = Math.floor((round - 1) / 2); // Hoeveel keer we al versneld zijn
+  const speedMultiplier = 1 + steps * 0.25;
   const speed = baseSpeed * speedMultiplier;
+
+  // KM/U logica: start op 100, +50 per versnelling
+  const speedKmH = 100 + (steps * 50);
 
   const waveIsBottom = waveLane === 0;
 
-  // 🌊 spawn wave
   const startRound = () => {
     setWaveLane(Math.floor(Math.random() * 2));
-    // Spawn de wave rechts buiten het scherm
     setWaveX(window.innerWidth + 200);
     setHasScored(false);
   };
 
   const finishGame = () => {
-    // updateScore(score);
-    // markGameAsPlayed(2);
     setRunning(false);
     setGameOver(true);
   };
@@ -65,13 +69,12 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
       setWaveX((x) => {
         const newX = x - speed * 6;
 
-        // 🌊 wave volledig voorbij de linkerkant -> volgende ronde
         if (newX < -200 && !roundLock.current) {
           roundLock.current = true;
 
           if (round >= maxRounds) {
-             finishGame();
-             return -200;
+            finishGame();
+            return -200;
           }
 
           setRound((r) => r + 1);
@@ -105,10 +108,9 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     return () => cancelAnimationFrame(raf);
   }, [running, speed]);
 
-  // 🎮 START NA COUNTDOWN
   useEffect(() => {
     if (running) {
-        startRound();
+      startRound();
     }
   }, [running]);
 
@@ -136,111 +138,156 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   useEffect(() => {
     if (!running) return;
 
-    // Alleen checken als de wave daadwerkelijk in beeld is
     if (waveX > window.innerWidth || waveX < -150) return;
 
     const playerCenter = window.innerWidth / 2;
     const waveCenter = waveX + 60;
     const xHit = Math.abs(waveCenter - playerCenter) < 50;
-    const correctLane = isBottom === waveIsBottom;
+    const isSameLane = isBottom === waveIsBottom;
 
-    if (xHit) {
-      if (correctLane) {
-        finishGame();
-      } else if (!hasScored) {
+    if (xHit && !hasScored) {
+      if (isSameLane) {
+        setScore((s) => Math.max(0, s - 5));
+        setHasScored(true);
+        setIsHit(true);
+        setTimeout(() => setIsHit(false), 300);
+      } else {
         setScore((s) => s + 5);
         setHasScored(true);
       }
     }
   }, [waveX, isBottom, waveIsBottom, running, hasScored]);
 
-  return (
-    <div className="container text-center">
+    useEffect(() => {
+    const audio = document.getElementById("bg-music");
+    if (audio) {
+      audio.volume = 0.3; // Zet het volume op 30% zodat het niet te hard is
+      audio.play().catch(error => {
+        console.log("Autoplay werd geblokkeerd. Muziek start na eerste klik.");
+      });
+    }
 
+    // Cleanup: Stop muziek als de gebruiker de pagina verlaat
+    return () => {
+        if (audio) {
+          audio.pause();
+        }
+      };
+    }, []);
+
+    useEffect(() => {
+    const audio = document.getElementById("bg-music");
+    if (gameOver && audio) {
+      // Fade out of stop de muziek direct
+      audio.pause();
+    }
+  }, [gameOver]);
+
+  return (
+    <div className={`container text-center ${isHit ? "hit-flash" : ""}`}>
+      <audio id="bg-music" src={backgroundMusic} loop />
       {!running && !gameOver && (
         <Countdown onComplete={() => setRunning(true)} />
       )}
 
-      <div className="text-section-game-2">
+      <div className="text-section-game">
         <h1>Magnet Switch</h1>
         <h3>Ronde {round} / {maxRounds}</h3>
-        <h3>Score: {score}</h3>
-        <h4>Snelheid: {speed.toFixed(2)}x</h4>
+        <h3 style={{ color: isHit ? "red" : "white", transition: "color 0.2s" }}>
+          Score: {score}
+        </h3>
+        {/* <h4>Snelheid: {speed.toFixed(2)}x</h4> */}
+        <div className="speedometer">
+          <span className="speed-value">{speedKmH}</span>
+          <span className="speed-unit"> km/u</span>
+        </div> 
         <p>↑ / ↓ om te wisselen</p>
       </div>
 
       <div className="game-wrapper2">
-
         <div className="parallax">
-          <div className="layer layer-back"
-            style={{ transform: `translateX(${bgX.current * 0.05}px)` }} />
-          <div className="layer layer-mid-fardest"
-            style={{ transform: `translateX(${bgX.current * 0.25}px)` }} />
-          <div className="layer layer-mid-far"
-            style={{ transform: `translateX(${bgX.current * 0.3}px)` }} />
-          <div className="layer layer-mid"
-            style={{ transform: `translateX(${bgX.current * 0.5}px)` }} />
-          <div className="layer layer-front"
-            style={{ transform: `translateX(${bgX.current * 1.4}px)` }} />
+          <div className="layer layer-back" style={{ transform: `translateX(${bgX.current * 0.05}px)` }} />
+          <div className="layer layer-mid-fardest" style={{ transform: `translateX(${bgX.current * 0.25}px)` }} />
+          <div className="layer layer-mid-far" style={{ transform: `translateX(${bgX.current * 0.3}px)` }} />
+          <div className="layer layer-mid" style={{ transform: `translateX(${bgX.current * 0.5}px)` }} />
+          <div className="layer layer-front" style={{ transform: `translateX(${bgX.current * 1.4}px)` }} />
         </div>
 
-        {/* 🌊 WAVE */}
         <div
           className="pressure-wave"
           style={{
             left: `${waveX}px`,
             bottom: waveIsBottom ? "21vh" : "12vh",
-            display: waveX < -500 ? 'none' : 'block' // Verberg als hij nog op de wachtpositie staat
+            display: waveX < -500 ? 'none' : 'block',
+            filter: isHit && isBottom === waveIsBottom ? "brightness(2) saturate(2)" : "none"
           }}
         />
 
-        {/* PLAYER */}
         {image && (
           <div
             className="player-wrapper"
             style={{
               bottom: isBottom ? "18vh" : "9vh",
               transition: "bottom 0.2s ease",
+              opacity: isHit ? 0.5 : 1
             }}
           >
             <img src={image} className="player" alt="hyperloop" />
           </div>
         )}
 
-        {/* MAGNETS */}
         <div className={`magnets ${!running ? "paused" : ""}`}>
           {[...Array(count)].map((_, i) => (
-            <div
-              key={`top-${i}`}
-              className={`magnet top ${magnetTopActive ? "pulse" : ""}`}
-              style={{ left: `${i * 50}px` }}
-            />
+            <div key={`top-${i}`} className={`magnet top ${magnetTopActive ? "pulse" : ""}`} style={{ left: `${i * 50}px` }} />
           ))}
           {[...Array(count)].map((_, i) => (
-            <div
-              key={`bottom-${i}`}
-              className={`magnet bottom ${!magnetTopActive ? "pulse" : ""}`}
-              style={{ left: `${i * 50}px` }}
-            />
+            <div key={`bottom-${i}`} className={`magnet bottom ${!magnetTopActive ? "pulse" : ""}`} style={{ left: `${i * 50}px` }} />
           ))}
         </div>
-
       </div>
 
       {gameOver && (
         <div className="game-over-overlay">
-          <div className="game-over-modal">
-            <h2>Game Over</h2>
-            <p>Eindscore: {score}</p>
+          <div className="game-over-modal" style={{ 
+            maxWidth: '1200px', 
+            width: '90%', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center' 
+          }}>
+            <h2>Missie Voltooid!</h2>
+            <p>Je hebt tijdens deze minigame <strong>{score}</strong> punten behaald!</p>
+            
+            <hr style={{ width: '100%', border: '0.5px solid #ccc', margin: '15px 0' }} />
+            
+            <div className="video-learning-section" style={{ width: '100%' }}>
+              <div style={{ 
+                width: '100%', 
+                borderRadius: '12px', 
+                overflow: 'hidden',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+                backgroundColor: '#000' 
+              }}>
+                <video 
+                  className="explainVideo-2" 
+                  src={video} 
+                  autoPlay 
+                  loop 
+                  muted // Essentieel voor autoplay in de meeste browsers
+                  style={{ 
+                    width: '100%', 
+                    display: 'block'
+                  }} 
+                />    
+              </div>
+            </div>
             
             <button
-              className="btn btn-primary mt-3"
+              className="btn-orange mt-4"
+              style={{ width: '100%', padding: '12px' }}
               onClick={() => {
-                // Eerst de data opslaan...
                 updateScore(score);
                 markGameAsPlayed(2); 
-                
-                // ...en dan pas weg navigeren
                 navigate("/games");
               }}
             >

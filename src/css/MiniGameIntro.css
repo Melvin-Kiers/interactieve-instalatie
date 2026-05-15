@@ -57,17 +57,18 @@
 
 .video-overflow-container {
     width: 110%;
-    margin-top: 40px;
     z-index: 10;
 }
 
 .game-video {
     width: 100%;
-    height: 40vh;
+    height: 50vh; /* Je kunt dit iets verhogen als de video groter mag */
     border-radius: 15px;
     border: 6px solid white;
-    object-fit: cover;
-    background-color: #d6e8b3; /* Placeholder kleur als video laadt */
+    /* VERANDER DIT: contain zorgt dat de hele video in het kader past */
+    object-fit: contain; 
+    /* Voeg dit toe voor een strakke achtergrond achter de video balken */
+    background-color: #00354F; 
 }
 
 .card-content-bottom {
@@ -102,7 +103,7 @@ h2.text-white {
 
 .description-text {
     color: #444;
-    font-size: 1.15rem;
+    font-size: 22px;
     line-height: 1.6;
     margin: 0;
 }

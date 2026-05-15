@@ -27,8 +27,8 @@ export default function NameInput({ setUsername }) {
         </h1>
 
         <p className="subtitle">
-          Bouw. Simuleer. Optimaliseer.<br />
-          Breng je idee tot leven in een interactieve omgeving.
+          Bouw. Speel. Leer.<br />
+          Teken je eigen Hyperloop en ontdek hoe deze werkt.
         </p>
 
         <div className="input_group">

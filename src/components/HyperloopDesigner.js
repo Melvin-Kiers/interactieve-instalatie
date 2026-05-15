@@ -1416,71 +1416,138 @@ export default function HyperloopDesigner({ username = "Melvin", onReset }) {
 
   if (submitted && drawingData) {
     return (
-      <div style={S.root}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", padding: 40 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 40 }}>
+      <div
+        style={{
+          ...S.root,
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <div style={{width: "80%", padding: 40 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 40
+            }}
+          >
 
             {/* IMAGE */}
-            <div style={{ flex: 1, textAlign: "center" }}>
+            <div
+              style={{
+                flex: 1.2,
+                background: "rgba(255,255,255,0.03)",
+                borderRadius: 20,
+                padding: 20,
+                border: "1px solid rgba(255,255,255,0.08)",
+                boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
               <img
                 src={drawingData}
                 alt="Hyperloop ontwerp"
                 style={{
-                  maxWidth: "100%",
-                  borderRadius: 16,
-                  boxShadow: "0 20px 60px rgba(0,0,0,0.6)"
+                  width: "100%",
+                  maxHeight: 320,
+                  objectFit: "contain",
+                  borderRadius: 12
                 }}
               />
             </div>
 
             {/* TEXT */}
-            <div style={{ flex: 1 }}>
-              <h2 style={{ marginBottom: 10 }}>
-                Jouw Hyperloop
+            <div
+              style={{
+                flex: 1,
+                background: "rgba(255,255,255,0.03)",
+                borderRadius: 20,
+                padding: 30,
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                boxShadow: "0 10px 40px rgba(0,0,0,0.4)"
+              }}
+            >
+              <h2 style={{ marginBottom: 10, fontSize: 26 }}>
+                Jouw <span style={{ color: "#ff6b2c" }}>Hyperloop</span>
               </h2>
 
-              <p>
-                Dit is jouw ontworpen {selectedPart?.name}. 
+              <div
+                style={{
+                  display: "inline-block",
+                  background: "rgba(255,107,44,0.15)",
+                  color: "#ff6b2c",
+                  padding: "4px 10px",
+                  borderRadius: 20,
+                  fontSize: 12,
+                  marginBottom: 15
+                }}
+              >
+                Ontwerp voltooid
+              </div>
+
+              <p style={{ opacity: 0.85, lineHeight: 1.6 }}>
+                Dit is jouw ontworpen <strong>{selectedPart?.name}</strong>. 
                 Je hebt zelf de kleuren gekozen en extra details getekend.
               </p>
 
-              <p>
+              <p style={{ opacity: 0.6, marginTop: 10 }}>
                 Hyperloops zijn supersnelle transportsystemen van de toekomst 🚄
                 waarbij capsules door buizen reizen met extreem hoge snelheid.
               </p>
 
-              <div style={{ marginTop: 20 }}>
+              <div
+                style={{
+                  marginTop: 25,
+                  display: "flex",
+                  gap: 12,
+                  flexWrap: "wrap"
+                }}
+              >
                 <button
                   onClick={() => navigate("/games")}
                   style={{
                     padding: "12px 20px",
-                    marginRight: 10,
-                    borderRadius: 10,
+                    borderRadius: 999,
                     border: "none",
-                    background: "#28a745",
+                    background: "#ff8c42",
                     color: "#fff",
                     cursor: "pointer"
                   }}
                 >
-                  Ga naar minigames 🎮
+                  🎮 Minigames
                 </button>
 
-                <button onClick={() => setSubmitted(false)}>
+                {/* <button
+                  onClick={() => setSubmitted(false)}
+                  style={{
+                    padding: "12px 20px",
+                    borderRadius: 999,
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    background: "transparent",
+                    color: "#fff",
+                    cursor: "pointer"
+                  }}
+                >
                   ✏️ Verder bewerken
-                </button>
+                </button> */}
 
                 <button
                   onClick={onReset}
                   style={{
                     padding: "12px 20px",
-                    borderRadius: 10,
+                    borderRadius: 999,
                     border: "none",
-                    background: "#007bff",
+                    background: "#1e293b",
                     color: "#fff",
                     cursor: "pointer"
                   }}
                 >
-                  Opnieuw beginnen
+                  🔄 Opnieuw beginnen
                 </button>
               </div>
 

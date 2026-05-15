@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import hyperloopBgGame3 from "../assets/bg-minigame-3.png";
+import video from "../assets/videos/test.mp4";
+import backgroundMusic from "../assets/sounds/minigame3.mp3";
 
 export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
@@ -11,6 +13,8 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const [result, setResult] = useState(null);
   const [finalScore, setFinalScore] = useState(0);
   const [image, setImage] = useState(null);
+  const [gameOver, setGameOver] = useState(false); // 🆕 Overlay trigger
+  const [hasScoredThisRound, setHasScoredThisRound] = useState(false); // 🔒 Score beveiliging
 
   // 🎯 Capsule state
   const [position, setPosition] = useState(15);
@@ -21,22 +25,21 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const [zonePos, setZonePos] = useState(40);
   const [zoneWidth, setZoneWidth] = useState(20);
   const [zoneVelocity, setZoneVelocity] = useState(0);
-  const [anchorPoint, setAnchorPoint] = useState(40); // Het punt waar hij omheen schommelt
+  const [anchorPoint, setAnchorPoint] = useState(40);
 
   // ⏱️ Timer state
   const [timer, setTimer] = useState(5);
 
-  // ⚙️ Physics constants
-  const drift = 0.12;        
-  const enginePower = 0.38;   
-  const damping = 0.9;       
+  const drift = 0.12;
+  const enginePower = 0.38;
+  const damping = 0.9;
 
-  // 🎨 Load image & controls
   useEffect(() => {
     const storedImage = localStorage.getItem("hyperloopImage");
     if (storedImage) setImage(storedImage);
 
     const down = (e) => {
+      if (gameOver) return;
       if (e.code === "ArrowRight" || e.code === "Space") setHolding(true);
     };
     const up = (e) => {
@@ -49,10 +52,11 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
       window.removeEventListener("keydown", down);
       window.removeEventListener("keyup", up);
     };
-  }, []);
+  }, [gameOver]);
 
   // 🟢 New round setup
   useEffect(() => {
+    if (gameOver) return;
     const startPos = Math.floor(Math.random() * 30) + 35;
     const newWidth = Math.max(8, 18 - round * 1.5);
 
@@ -66,15 +70,15 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     setHolding(false);
     setResult(null);
     setTimer(5);
+    setHasScoredThisRound(false); // 🔓 Reset voor nieuwe ronde
     setRunning(true);
-  }, [round]);
+  }, [round, gameOver]);
 
-  // ⏱️ Timer & Moving Target Logic (Schommel-effect)
+  // ⏱️ Timer & Moving Target Logic
   useEffect(() => {
-    if (!running || result) return;
+    if (!running || result || gameOver) return;
 
     const interval = setInterval(() => {
-      // 1. Timer aftellen
       setTimer((prev) => {
         if (prev <= 0.05) {
           finishRound();
@@ -83,35 +87,28 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
         return parseFloat((prev - 0.05).toFixed(2));
       });
 
-      // 2. Schommel-logica voor de Zone
       setZoneVelocity((v) => {
-        // Een kleine random zetje geven
         let newV = v + (Math.random() - 0.5) * 0.15;
-        
-        // "Elastiek" effect: trek de zone terug naar het anchorPoint
         const distanceFromAnchor = zonePos - anchorPoint;
         newV -= distanceFromAnchor * 0.02; 
-
-        // Snelheidslimiet voor het vakje (neemt toe per ronde)
         const maxV = 0.3 + (round * 0.1);
         return Math.max(-maxV, Math.min(maxV, newV));
       });
 
       setZonePos((prev) => {
         let next = prev + zoneVelocity;
-        // Harde grenzen
         if (next < 12) { next = 12; setZoneVelocity(0.1); }
         if (next + zoneWidth > 88) { next = 88 - zoneWidth; setZoneVelocity(-0.1); }
         return next;
       });
-
     }, 50);
 
     return () => clearInterval(interval);
-  }, [running, result, zonePos, zoneVelocity, anchorPoint, round]);
+  }, [running, result, zonePos, zoneVelocity, anchorPoint, round, gameOver]);
 
+  // 🚄 Physics loop
   useEffect(() => {
-    if (!running) return;
+    if (!running || gameOver) return;
 
     const interval = setInterval(() => {
       setPosition((prev) => {
@@ -130,126 +127,187 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     }, 20);
 
     return () => clearInterval(interval);
-  }, [running, holding, velocity]);
+  }, [running, holding, velocity, gameOver]);
 
   const finishRound = () => {
-    setRunning(false);
-    // Gebruik de huidige states voor score-berekening
-    setZonePos((currentZonePos) => {
-      setPosition((currentCapsulePos) => {
-        const zoneEnd = currentZonePos + zoneWidth;
-        let points = 0;
+    // 🛡️ Beveiliging tegen dubbel scoren
+    setHasScoredThisRound((alreadyScored) => {
+      if (alreadyScored) return true;
 
-        if (currentCapsulePos >= currentZonePos && currentCapsulePos <= zoneEnd) {
-          points = 100;
-        } else {
-          const dist = Math.min(
-            Math.abs(currentCapsulePos - currentZonePos),
-            Math.abs(currentCapsulePos - zoneEnd)
-          );
-          if (dist < 5) points = 70;
-          else if (dist < 10) points = 40;
-          else points = 10;
-        }
+      setRunning(false);
+      setZonePos((currentZonePos) => {
+        setPosition((currentCapsulePos) => {
+          const zoneEnd = currentZonePos + zoneWidth;
+          let points = 0;
 
-        setFinalScore((prev) => {
-          const newTotal = prev + points;
-          setResult({ round, points, total: newTotal, finished: false });
-          return newTotal;
+          if (currentCapsulePos >= currentZonePos && currentCapsulePos <= zoneEnd) {
+            points = 100;
+          } else {
+            const dist = Math.min(
+              Math.abs(currentCapsulePos - currentZonePos),
+              Math.abs(currentCapsulePos - zoneEnd)
+            );
+            if (dist < 5) points = 70;
+            else if (dist < 10) points = 40;
+            else points = 10;
+          }
+
+          setFinalScore((prev) => prev + points);
+          setResult({ round, points, total: finalScore + points, finished: false });
+
+          return currentCapsulePos;
         });
-
-        return currentCapsulePos;
+        return currentZonePos;
       });
-      return currentZonePos;
+
+      return true;
     });
   };
 
   const nextRound = () => {
     if (round >= maxRounds) {
-      updateScore(finalScore);
-      markGameAsPlayed(3);
-      setResult({ finished: true, total: finalScore });
+      setGameOver(true);
+      setRunning(false);
+      setResult(null);
     } else {
       setRound((r) => r + 1);
     }
   };
 
+  // 🏁 Pas echt afsluiten
+  const handleFinalExit = () => {
+    updateScore(finalScore);
+    markGameAsPlayed(3);
+    navigate("/games");
+  };
+
+  useEffect(() => {
+    const audio = document.getElementById("bg-music");
+    if (audio) {
+      audio.volume = 0.3; // Zet het volume op 30% zodat het niet te hard is
+      audio.play().catch(error => {
+        console.log("Autoplay werd geblokkeerd. Muziek start na eerste klik.");
+      });
+    }
+
+    // Cleanup: Stop muziek als de gebruiker de pagina verlaat
+    return () => {
+        if (audio) {
+          audio.pause();
+        }
+      };
+    }, []);
+
+    useEffect(() => {
+    const audio = document.getElementById("bg-music");
+    if (gameOver && audio) {
+      // Fade out of stop de muziek direct
+      audio.pause();
+    }
+  }, [gameOver]);
+
   return (
-    <>
-    <img src={hyperloopBgGame3} className="bg-image-game-3" />
-    <div className="text-center mt-4">
-      <h1>Magnetic Stability Control</h1>
-      <h3 className="mb-0">Ronde {round} / {maxRounds}</h3>
+    <div className="minigame-container" style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
+      <audio id="bg-music" src={backgroundMusic} loop />
+      <img src={hyperloopBgGame3} className="bg-image-game-3" alt="background" />
+      
+      <div className="game-screen text-center mt-4">
+        <div className="text-section-game">
+          <h1>Houdt de <br />Hyperloop stabiel</h1>
+          <h3 className="mb-0">Ronde {round} / {maxRounds}</h3>
+          <div className={`timer-display ${timer < 1.5 ? "text-danger animate-pulse" : ""}`} 
+             style={{ fontSize: '2.5rem', fontWeight: 'bold', height: '60px' }}>{timer}s
+          </div>
+          <h4>Score: {finalScore}</h4>
+          {/* <div className="speedometer">
+            <span className="speed-value">{Math.round(velocity * 100)}</span>
+            <span className="speed-unit"> km/u</span>
+          </div> */}
+          <p>
+            <strong>SPATIE</strong> ingedrukt is vooruit, los laten is achteruit
+          </p>
+        </div>
 
-      <div className={`timer-display ${timer < 1.5 ? "text-danger animate-pulse" : ""}`} 
-           style={{ fontSize: '2.5rem', fontWeight: 'bold', height: '60px' }}>
-        {timer}s
-      </div>
+        <div className="game-bar-wrapper3">
+          <div className="game-bar3">
+            <div style={{ position: 'absolute', height: '100%', left: `${zonePos - 10}%`, width: '10%', backgroundColor: 'rgba(255, 0, 0, 0.2)', borderRadius: '5px' }} />
+            <div style={{ position: 'absolute', height: '100%', left: `${zonePos - 5}%`, width: '5%', backgroundColor: 'rgba(255, 165, 0, 0.3)' }} />
 
-      <div className="game-bar-wrapper3">
-        <div className="game-bar3">
-          
-          <div style={{ position: 'absolute', height: '100%', left: `${zonePos - 10}%`, width: '10%', backgroundColor: 'rgba(255, 0, 0, 0.2)', borderRadius: '5px' }} />
-          <div style={{ position: 'absolute', height: '100%', left: `${zonePos - 5}%`, width: '5%', backgroundColor: 'rgba(255, 165, 0, 0.3)' }} />
-
-          <div
-            className="target-zone"
-            style={{
-              left: `${zonePos}%`,
-              width: `${zoneWidth}%`,
-              backgroundColor: 'rgba(40, 167, 69, 0.5)',
-              borderLeft: '3px solid green',
-              borderRight: '3px solid green',
-              boxShadow: '0 0 15px rgba(40, 167, 69, 0.3)'
-            }}
-          />
-
-          <div style={{ position: 'absolute', height: '100%', left: `${zonePos + zoneWidth}%`, width: '5%', backgroundColor: 'rgba(255, 165, 0, 0.3)' }} />
-          <div style={{ position: 'absolute', height: '100%', left: `${zonePos + zoneWidth + 5}%`, width: '10%', backgroundColor: 'rgba(255, 0, 0, 0.2)', borderRadius: '5px' }} />
-
-          {image && (
-            <img
-              src={image}
-              className="hyperloop-indicator"
-              style={{ 
-                left: `${position}%`,
-                filter: holding ? 'drop-shadow(0 0 12px cyan) brightness(1.2)' : 'none',
-                transition: 'filter 0.3s',
-                zIndex: 10
+            <div
+              className="target-zone"
+              style={{
+                left: `${zonePos}%`,
+                width: `${zoneWidth}%`,
+                backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                borderLeft: '3px solid green',
+                borderRight: '3px solid green',
+                boxShadow: '0 0 15px rgba(40, 167, 69, 0.3)'
               }}
-              alt="hyperloop"
             />
-          )}
+
+            <div style={{ position: 'absolute', height: '100%', left: `${zonePos + zoneWidth}%`, width: '5%', backgroundColor: 'rgba(255, 165, 0, 0.3)' }} />
+            <div style={{ position: 'absolute', height: '100%', left: `${zonePos + zoneWidth + 5}%`, width: '10%', backgroundColor: 'rgba(255, 0, 0, 0.2)', borderRadius: '5px' }} />
+
+            {image && (
+              <img
+                src={image}
+                className="hyperloop-indicator"
+                style={{ 
+                  left: `${position}%`,
+                  filter: holding ? 'drop-shadow(0 0 12px cyan) brightness(1.2)' : 'none',
+                  transition: 'filter 0.3s',
+                  zIndex: 10
+                }}
+                alt="hyperloop"
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="mt-4">
+          {!result && !gameOver ? (
+            <p></p>
+          ) : !gameOver && result ? (
+            <div className="minigame3-result result-area">
+              <h2 className={result.points === 100 ? "text-success" : "text-primary"}>
+                {result.points === 100 ? "Perfecte Stabiliteit!" : `+${result.points} punten`}
+              </h2>
+              <h3>Totaal: {result.total}</h3>
+              <button className="btn btn-success btn-lg mt-2" onClick={nextRound}>
+                {round >= maxRounds ? "Resultaat bekijken" : "Volgende ronde"}
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
 
-      <div className="mt-4">
-        {!result ? (
-          <p>
-            Houd de capsule stabiel! Het magnetisch veld schommelt.<br/>
-            <strong>SPATIE / RECHTS</strong> = Gas geven
-          </p>
-        ) : !result.finished ? (
-          <div className="minigame3-result result-area">
-            <h2 className={result.points === 100 ? "text-success" : "text-primary"}>
-              {result.points === 100 ? "Perfecte Stabiliteit!" : `+${result.points} punten`}
-            </h2>
-            <h3>Totaal: {result.total}</h3>
-            <button className="btn btn-success btn-lg mt-2" onClick={nextRound}>
-              Volgende ronde
-            </button>
-          </div>
-        ) : (
-          <div className="final-area">
-            <h2>Test voltooid!</h2>
-            <h3 className="display-4">{result.total} punten</h3>
-            <button className="btn btn-primary btn-lg mt-3" onClick={() => navigate("/games")}>
+      {gameOver && (
+        <div className="game-over-overlay">
+          <div className="game-over-modal" style={{ maxWidth: '1200px', width: '90%' }}>
+            <h2>Missie Voltooid!</h2>
+            <p>Je hebt tijdens deze minigame <strong>{finalScore}</strong> punten behaald!</p>
+            
+            <hr style={{ width: '100%', border: '0.5px solid #444', margin: '15px 0' }} />
+            
+            <div className="video-learning-section" style={{ width: '100%' }}>
+              <div className="video-container" style={{ 
+                width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#000',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.3)', lineHeight: 0 
+              }}>
+                <video className="explainVideo-2" src={video} autoPlay loop playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />    
+              </div>
+            </div>
+
+            <button 
+              className="btn-orange btn-full mt-4" 
+              style={{ width: '100%', padding: '12px', fontWeight: 'bold' }} 
+              onClick={handleFinalExit}
+            >
               Terug naar GameHub
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
-    </>
   );
 }
