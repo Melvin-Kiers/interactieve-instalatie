@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Countdown from "./Countdown";
-import video from "../assets/videos/bg-video.mp4";
+// import video from "../assets/videos/bg-video.mp4";
+import uitlegVideoMiniGame2 from "..//assets/videos/UitlegVideoMiniGame2.mp4";
 import backgroundMusic from "../assets/sounds/minigame2.mp3";
 
 export default function MiniGame2({ updateScore, markGameAsPlayed }) {
@@ -161,7 +162,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     useEffect(() => {
     const audio = document.getElementById("bg-music");
     if (audio) {
-      audio.volume = 0.3; // Zet het volume op 30% zodat het niet te hard is
+      audio.volume = 0.7; // Zet het volume op 30% zodat het niet te hard is
       audio.play().catch(error => {
         console.log("Autoplay werd geblokkeerd. Muziek start na eerste klik.");
       });
@@ -270,10 +271,8 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
               }}>
                 <video 
                   className="explainVideo-2" 
-                  src={video} 
+                  src={uitlegVideoMiniGame2} 
                   autoPlay 
-                  loop 
-                  muted // Essentieel voor autoplay in de meeste browsers
                   style={{ 
                     width: '100%', 
                     display: 'block'

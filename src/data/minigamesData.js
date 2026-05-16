@@ -18,7 +18,7 @@ const minigamesData = [
   {
     id: 2,
     title: "Magneet Switch",
-    description: "Race door een futuristische tunnel! Je Hyperloop gaat vanzelf vooruit, maar pas op voor de blauwe cirkels (drukgolven). Wissel snel van baan om ze te ontwijken. Hoe verder je komt, maar pas op je gaat steeds sneller. Bij een botsing verlies je punten, dus pas op!",
+    description: "Race door een futuristische tunnel! Je Hyperloop gaat vanzelf vooruit, maar pas op voor de blauwe cirkels (drukgolven). Wissel snel van baan om ze te ontwijken. Maar pas op je gaat steeds sneller als je verder komt. Bij een botsing verlies je punten, dus pas op!",
     video: uitleg2,
     controls: [
       { icon: star, label: "star" },

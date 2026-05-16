@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import hyperloopBgGame1 from "../assets/bg-minigame-1.png";
-import video from "../assets/videos/test.mp4"; 
+// import video from "../assets/videos/test.mp4"; 
 import backgroundMusic from "../assets/sounds/minigame1.mp3";
+import uitlegVideoMiniGame1 from "..//assets/videos/UitlegVideoMiniGame1.mp4";
 
 export default function MiniGame1({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
@@ -209,7 +210,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
                 width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#000',
                 boxShadow: '0 4px 15px rgba(0,0,0,0.3)', lineHeight: 0 
               }}>
-                <video className="explainVideo-2" src={video} autoPlay loop playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />    
+                <video className="explainVideo-2" src={uitlegVideoMiniGame1} autoPlay playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />    
               </div>
             </div>
             <button className="btn-orange btn-full mt-4" style={{ width: '100%', padding: '12px', fontWeight: 'bold' }} onClick={handleFinalExit}>
