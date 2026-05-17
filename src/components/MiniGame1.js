@@ -95,6 +95,28 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, [running, brakeActive, gameOver]);
 
+  useEffect(() => {
+  const handleKeyDown = (e) => {
+    if (e.key !== "Enter") return;
+
+    if (gameOver) {
+      handleFinalExit();
+      return;
+    }
+
+    if (result) {
+      nextRound();
+      return;
+    }
+  };
+
+  document.addEventListener("keydown", handleKeyDown, true);
+
+  return () => {
+    document.removeEventListener("keydown", handleKeyDown, true);
+  };
+}, [result, gameOver]);
+
   const finishRound = (stopPos) => {
     // 🛡️ Blokkeer als er deze ronde al gescoord is
     setHasScoredThisRound((alreadyScored) => {

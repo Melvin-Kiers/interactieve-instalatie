@@ -1372,28 +1372,6 @@ export default function HyperloopDesigner({ username = "Melvin", onReset }) {
     prevPos.current = { x, y };
   };
 
-  const undo = () => {
-    if (!historyRef.current.length) return;
-    const snap = historyRef.current.pop();
-    redoRef.current.push(drawRef.current.toDataURL());
-    const ctx = drawRef.current.getContext("2d");
-    ctx.clearRect(0, 0, W, H);
-    const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0);
-    img.src = snap;
-  };
-
-  const redo = () => {
-    if (!redoRef.current.length) return;
-    const snap = redoRef.current.pop();
-    historyRef.current.push(drawRef.current.toDataURL());
-    const ctx = drawRef.current.getContext("2d");
-    ctx.clearRect(0, 0, W, H);
-    const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0);
-    img.src = snap;
-  };
-
   const clearAll = () => {
     saveHistory();
     drawRef.current.getContext("2d").clearRect(0, 0, W, H);
@@ -1413,6 +1391,31 @@ export default function HyperloopDesigner({ username = "Melvin", onReset }) {
     setDrawingData(data);
     setSubmitted(true);
   };
+
+useEffect(() => {
+  const handleKeyDown = (e) => {
+    console.log("Key pressed:", e.key);
+
+    if (e.key === "Enter") {
+      if (!submitted) {
+        handleSubmit();
+      } else {
+        navigate("/games");
+      }
+    }
+
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      onReset?.();
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+
+  return () => {
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, [submitted, onReset, navigate]);
 
   if (submitted && drawingData) {
     return (
@@ -1607,9 +1610,11 @@ export default function HyperloopDesigner({ username = "Melvin", onReset }) {
             <button style={S.toolBtn(tool === "eraser")} onClick={() => setTool("eraser")}>🧽 Wissen</button>
             <button style={S.deleteBtn} onClick={clearAll}>🗑️ Alles wissen</button>
           </div>
-          <div style={S.submitRow}>
-            <button style={S.submitBtn} onClick={handleSubmit}>Verstuur naar scherm →</button>
-          </div>
+<div style={S.submitRow}>
+  <button style={S.submitBtn} onClick={handleSubmit}>
+    Verder gaan →
+  </button>
+</div>
         </div>
 
         <div style={S.rightPanel}>

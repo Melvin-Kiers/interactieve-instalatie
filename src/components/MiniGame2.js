@@ -184,6 +184,20 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     }
   }, [gameOver]);
 
+  useEffect(() => {
+  const handleEnter = (e) => {
+    if (e.code === "Enter" && gameOver) {
+      updateScore(score);
+      markGameAsPlayed(2);
+      navigate("/games");
+    }
+  };
+
+  window.addEventListener("keydown", handleEnter);
+  return () => window.removeEventListener("keydown", handleEnter);
+}, [gameOver, score]);
+
+
   return (
     <div className={`container text-center ${isHit ? "hit-flash" : ""}`}>
       <audio id="bg-music" src={backgroundMusic} loop />

@@ -206,6 +206,28 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     }
   }, [gameOver]);
 
+  useEffect(() => {
+  const handleKeyDown = (e) => {
+    if (e.key !== "Enter") return;
+
+    if (gameOver) {
+      handleFinalExit();
+      return;
+    }
+
+    if (result) {
+      nextRound();
+      return;
+    }
+  };
+
+  document.addEventListener("keydown", handleKeyDown, true);
+
+  return () => {
+    document.removeEventListener("keydown", handleKeyDown, true);
+  };
+}, [result, gameOver]);
+
   return (
     <div className="minigame-container" style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
       <audio id="bg-music" src={backgroundMusic} loop />

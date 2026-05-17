@@ -54,7 +54,7 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
         case "1": if (!isPlayed(1)) navigate("/games/uitleg/1"); break;
         case "2": if (!isPlayed(2)) navigate("/games/uitleg/2"); break;
         case "3": if (!isPlayed(3)) navigate("/games/uitleg/3"); break;
-        case "4":
+        case "Enter":
           if (allGamesPlayed) {
             saveToLeaderboard();
             navigate("/leaderboard");

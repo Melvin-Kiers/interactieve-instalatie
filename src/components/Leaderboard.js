@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import icon from "../assets/icons/star.png";
 import rankIcon from "../assets/icons/trophy.png";
@@ -11,6 +11,15 @@ export default function Leaderboard({ onReset }) {
     if (onReset) onReset();
     window.location.href = "/";
   };
+
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.code === "Enter") handleRestart();
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
 
   return (
     <div className="lb-page-wrapper">
