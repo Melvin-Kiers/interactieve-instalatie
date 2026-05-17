@@ -15,7 +15,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
   const [result, setResult] = useState(null);
   const [finalScore, setFinalScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
-  const [hasScoredThisRound, setHasScoredThisRound] = useState(false); // 🔒 Nieuwe check
+  const [hasScoredThisRound, setHasScoredThisRound] = useState(false);
 
   const [position, setPosition] = useState(0);
   const [velocity, setVelocity] = useState(0);
@@ -60,7 +60,6 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
           setVelocity(0);
           setBrakeActive(false);
           setRunning(false);
-          // Gebruik een functionele update om de laatste positie veilig te pakken
           setPosition((finalPos) => {
             finishRound(finalPos);
             return finalPos;
@@ -81,7 +80,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
     setVelocity(0);
     setBrakeActive(false);
     setResult(null);
-    setHasScoredThisRound(false); // 🔓 Reset check voor nieuwe ronde
+    setHasScoredThisRound(false);
     setRunning(true);
   }, [round, gameOver]);
 
@@ -118,7 +117,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
 }, [result, gameOver]);
 
   const finishRound = (stopPos) => {
-    // 🛡️ Blokkeer als er deze ronde al gescoord is
+    // Blokkeer als er deze ronde al gescoord is
     setHasScoredThisRound((alreadyScored) => {
       if (alreadyScored) return true; 
 

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import hyperloopBgGame3 from "../assets/bg-minigame-3.png";
 import video from "../assets/videos/test.mp4";
 import backgroundMusic from "../assets/sounds/minigame3.mp3";
+import uitlegVideoMiniGame3 from "..//assets/videos/UitlegVideoMiniGame3.mp4";
 
 export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
@@ -13,21 +14,21 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const [result, setResult] = useState(null);
   const [finalScore, setFinalScore] = useState(0);
   const [image, setImage] = useState(null);
-  const [gameOver, setGameOver] = useState(false); // 🆕 Overlay trigger
-  const [hasScoredThisRound, setHasScoredThisRound] = useState(false); // 🔒 Score beveiliging
+  const [gameOver, setGameOver] = useState(false);
+  const [hasScoredThisRound, setHasScoredThisRound] = useState(false);
 
-  // 🎯 Capsule state
+  // Capsule state
   const [position, setPosition] = useState(15);
   const [velocity, setVelocity] = useState(0);
   const [holding, setHolding] = useState(false);
 
-  // 🟢 Target zone state
+  // Target zone state
   const [zonePos, setZonePos] = useState(40);
   const [zoneWidth, setZoneWidth] = useState(20);
   const [zoneVelocity, setZoneVelocity] = useState(0);
   const [anchorPoint, setAnchorPoint] = useState(40);
 
-  // ⏱️ Timer state
+  // Timer state
   const [timer, setTimer] = useState(5);
 
   const drift = 0.12;
@@ -54,7 +55,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     };
   }, [gameOver]);
 
-  // 🟢 New round setup
+  // New round setup
   useEffect(() => {
     if (gameOver) return;
     const startPos = Math.floor(Math.random() * 30) + 35;
@@ -70,11 +71,11 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     setHolding(false);
     setResult(null);
     setTimer(5);
-    setHasScoredThisRound(false); // 🔓 Reset voor nieuwe ronde
+    setHasScoredThisRound(false);
     setRunning(true);
   }, [round, gameOver]);
 
-  // ⏱️ Timer & Moving Target Logic
+  // Timer & Moving Target Logic
   useEffect(() => {
     if (!running || result || gameOver) return;
 
@@ -106,7 +107,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     return () => clearInterval(interval);
   }, [running, result, zonePos, zoneVelocity, anchorPoint, round, gameOver]);
 
-  // 🚄 Physics loop
+  // Physics loop
   useEffect(() => {
     if (!running || gameOver) return;
 
@@ -130,7 +131,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   }, [running, holding, velocity, gameOver]);
 
   const finishRound = () => {
-    // 🛡️ Beveiliging tegen dubbel scoren
+    // Beveiliging tegen dubbel scoren
     setHasScoredThisRound((alreadyScored) => {
       if (alreadyScored) return true;
 
@@ -174,7 +175,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     }
   };
 
-  // 🏁 Pas echt afsluiten
+  // Pas echt afsluiten
   const handleFinalExit = () => {
     updateScore(finalScore);
     markGameAsPlayed(3);
@@ -316,7 +317,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
                 width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#000',
                 boxShadow: '0 4px 15px rgba(0,0,0,0.3)', lineHeight: 0 
               }}>
-                <video className="explainVideo-2" src={video} autoPlay loop playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />    
+                <video className="explainVideo-2" src={uitlegVideoMiniGame3} autoPlay loop playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />    
               </div>
             </div>
 

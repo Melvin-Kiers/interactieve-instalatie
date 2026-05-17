@@ -11,7 +11,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const [image, setImage] = useState(null);
   const [isBottom, setIsBottom] = useState(false);
 
-  // 🌊 WAVE
+  // WAVE
   const [waveX, setWaveX] = useState(-1000);
   const [waveLane, setWaveLane] = useState(0);
 
@@ -42,11 +42,10 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
 
   // Snelheid berekeningen
   const baseSpeed = 1;
-  const steps = Math.floor((round - 1) / 2); // Hoeveel keer we al versneld zijn
+  const steps = Math.floor((round - 1) / 2);
   const speedMultiplier = 1 + steps * 0.25;
   const speed = baseSpeed * speedMultiplier;
 
-  // KM/U logica: start op 100, +50 per versnelling
   const speedKmH = 100 + (steps * 50);
 
   const waveIsBottom = waveLane === 0;
@@ -62,7 +61,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     setGameOver(true);
   };
 
-  // 🌊 WAVE MOVEMENT + ROUND CONTROL
+  // WAVE MOVEMENT + ROUND CONTROL
   useEffect(() => {
     if (!running) return;
 
@@ -95,7 +94,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     return () => clearInterval(interval);
   }, [running, speed, round]);
 
-  // 🌄 PARALLAX
+  // PARALLAX
   useEffect(() => {
     if (!running) return;
 
@@ -115,7 +114,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     }
   }, [running]);
 
-  // 🎮 INPUT
+  // INPUT
   useEffect(() => {
     const handleKey = (e) => {
       if (!runningRef.current) return;
@@ -135,7 +134,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
-  // 💥 COLLISION
+  // COLLISION
   useEffect(() => {
     if (!running) return;
 
@@ -162,13 +161,12 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     useEffect(() => {
     const audio = document.getElementById("bg-music");
     if (audio) {
-      audio.volume = 0.7; // Zet het volume op 30% zodat het niet te hard is
+      audio.volume = 0.7;
       audio.play().catch(error => {
         console.log("Autoplay werd geblokkeerd. Muziek start na eerste klik.");
       });
     }
 
-    // Cleanup: Stop muziek als de gebruiker de pagina verlaat
     return () => {
         if (audio) {
           audio.pause();
@@ -179,7 +177,6 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     useEffect(() => {
     const audio = document.getElementById("bg-music");
     if (gameOver && audio) {
-      // Fade out of stop de muziek direct
       audio.pause();
     }
   }, [gameOver]);
