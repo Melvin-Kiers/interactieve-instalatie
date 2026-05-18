@@ -14,7 +14,7 @@ export default function Leaderboard({ onReset }) {
 
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.code === "Enter") handleRestart();
+      if (e.code === "ArrowRight") handleRestart();
     };
 
     window.addEventListener("keydown", handleKey);

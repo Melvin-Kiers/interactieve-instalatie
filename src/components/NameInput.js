@@ -12,7 +12,7 @@ export default function NameInput({ setUsername }) {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") handleSubmit();
+    if (e.key === "ArrowRight") handleSubmit();
   };
 
   return (

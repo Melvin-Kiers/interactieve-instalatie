@@ -96,7 +96,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
 
   useEffect(() => {
   const handleKeyDown = (e) => {
-    if (e.key !== "Enter") return;
+    if (e.key !== "ArrowRight") return;
 
     if (gameOver) {
       handleFinalExit();

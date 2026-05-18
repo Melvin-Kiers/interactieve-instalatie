@@ -51,10 +51,10 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
       const isPlayed = (id) => playedGames.includes(id);
 
       switch (e.key) {
-        case "1": if (!isPlayed(1)) navigate("/games/uitleg/1"); break;
-        case "2": if (!isPlayed(2)) navigate("/games/uitleg/2"); break;
-        case "3": if (!isPlayed(3)) navigate("/games/uitleg/3"); break;
-        case "Enter":
+        case " ": if (!isPlayed(1)) navigate("/games/uitleg/1"); break;
+        case "ArrowDown": if (!isPlayed(2)) navigate("/games/uitleg/2"); break;
+        case "ArrowUp": if (!isPlayed(3)) navigate("/games/uitleg/3"); break;
+        case "ArrowRight":
           if (allGamesPlayed) {
             saveToLeaderboard();
             navigate("/leaderboard");

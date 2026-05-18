@@ -14,7 +14,7 @@ const MiniGameIntro = () => {
   useEffect(() => {
     // Luister naar Enter toets
     const handleKeyDown = (e) => {
-      if (e.key === "Enter") navigate(`/game/${id}`);
+      if (e.key === "ArrowRight") navigate(`/game/${id}`);
     };
     window.addEventListener("keydown", handleKeyDown);
 

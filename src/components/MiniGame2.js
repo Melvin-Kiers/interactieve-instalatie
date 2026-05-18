@@ -183,7 +183,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
 
   useEffect(() => {
   const handleEnter = (e) => {
-    if (e.code === "Enter" && gameOver) {
+    if (e.code === "ArrowRight" && gameOver) {
       updateScore(score);
       markGameAsPlayed(2);
       navigate("/games");

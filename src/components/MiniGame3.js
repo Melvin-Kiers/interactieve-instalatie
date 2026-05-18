@@ -41,10 +41,10 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
 
     const down = (e) => {
       if (gameOver) return;
-      if (e.code === "ArrowRight" || e.code === "Space") setHolding(true);
+      if (e.code === "Space") setHolding(true);
     };
     const up = (e) => {
-      if (e.code === "ArrowRight" || e.code === "Space") setHolding(false);
+      if (e.code === "Space") setHolding(false);
     };
 
     window.addEventListener("keydown", down);
@@ -209,7 +209,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
 
   useEffect(() => {
   const handleKeyDown = (e) => {
-    if (e.key !== "Enter") return;
+    if (e.key !== "ArrowRight") return;
 
     if (gameOver) {
       handleFinalExit();

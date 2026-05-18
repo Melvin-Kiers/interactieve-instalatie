@@ -1396,7 +1396,7 @@ useEffect(() => {
   const handleKeyDown = (e) => {
     console.log("Key pressed:", e.key);
 
-    if (e.key === "Enter") {
+    if (e.key === "ArrowRight") {
       if (!submitted) {
         handleSubmit();
       } else {
@@ -1404,7 +1404,7 @@ useEffect(() => {
       }
     }
 
-    if (e.key === "Backspace") {
+    if (e.key === "ArrowLeft") {
       e.preventDefault();
       onReset?.();
     }
