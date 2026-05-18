@@ -69,7 +69,7 @@ const MiniGameIntro = () => {
                 {game.controls && game.controls.map((control, index) => (
                   <div key={index} className="control-item d-flex align-items-center mb-4">
                     <div className="control-icon-wrapper me-3">
-                      <img src={control.icon} alt={control.label} className="control-icon-img" />
+                      <img src={control.icon} alt={control.label} style={{ width: control.size ?? "60px" }} />
                     </div>
                     <span className="text-white fs-4">{control.label}</span>
                   </div>
@@ -82,7 +82,7 @@ const MiniGameIntro = () => {
                 className="btn-start w-100 py-3 shadow-lg"
                 onClick={() => navigate(`/game/${id}`)}
               >
-                Start (ENTER)
+                Druk op de oranje knop om te starten!
               </button>
             </div>
           </div>

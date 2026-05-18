@@ -10,9 +10,9 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
   const audioRef = useRef(null); // Gebruik een ref in plaats van een globale variabele
 
   const games = [
-    { id: 1, name: "Rem precies goed", route: "/games/uitleg/1" },
-    { id: 2, name: "Magneet Switch", route: "/games/uitleg/2" },
-    { id: 3, name: "Houdt de Hyperloop stabiel", route: "/games/uitleg/3" },
+    { id: 1, name: "Rem precies goed", route: "/games/uitleg/1", color: "blauwe" },
+    { id: 2, name: "Magneet Switch", route: "/games/uitleg/2", color: "zwarte" },
+    { id: 3, name: "Houdt de Hyperloop stabiel", route: "/games/uitleg/3", color: "groene" },
   ];
 
   const allGamesPlayed = playedGames.length >= games.length;
@@ -68,6 +68,15 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [navigate, playedGames, allGamesPlayed, saveToLeaderboard]);
 
+  function getColor(name) {
+    const colors = {
+      blauwe: "#003DAD",
+      zwarte: "#000000",
+      groene: "#114922",
+    };
+    return colors[name] ?? "inherit";
+  }
+
   return (
     <section className="game-hub">
       <div className="container">
@@ -95,11 +104,24 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
             return (
               <div
                 key={game.id}
-                className={`game-card ${isPlayed ? "disabled" : ""}`}
+                className={`game-card ${game.color} ${isPlayed ? "disabled" : ""}`}
                 onClick={() => !isPlayed && navigate(game.route)}
               >
                 <h2>{game.name}</h2>
-                {isPlayed ? <p>✅ Al gespeeld</p> : <p>Klik om te spelen</p>}
+
+                {isPlayed ? (
+                  <p>✅ Minigame voltooid</p>
+                ) : (
+                  <p>
+                    Druk op de{" "}
+                    <strong>
+                      <span style={{ color: getColor(game.color) }}>
+                        {game.color}
+                      </span>{" "}
+                    </strong>
+                    knop om te starten
+                  </p>
+                )}
               </div>
             );
           })}
@@ -107,13 +129,14 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
 
         {allGamesPlayed && (
           <button 
-            className="col-6 leaderboard-overlay btn btn-warning" 
+            className="col-8 leaderboard-overlay btn btn-orange" 
+            style={{ fontSize: "2.5rem" }}
             onClick={() => {
               saveToLeaderboard();
               navigate("/leaderboard");
             }}
           >
-            Bekijk Klassement 🏆
+            Bekijk je score, en die van andere! 🏆
           </button>
         )}
       </div>

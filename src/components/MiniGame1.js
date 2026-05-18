@@ -213,8 +213,8 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
           <div className="minigame1-result">
             <h2 className="mt-3">+{result.points} punten</h2>
             <h3>Totaal: {result.total}</h3>
-            <button className="btn btn-success mt-3" onClick={nextRound}>
-              {round >= maxRounds ? "Resultaat bekijken" : "Volgende ronde"}
+            <button className="btn btn-orange mt-3" onClick={nextRound}>
+              {round >= maxRounds ? "Resultaat bekijken" : "Druk op de oranje knop voor de volgende ronde!"}
             </button>
           </div>
         )}
@@ -235,7 +235,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
               </div>
             </div>
             <button className="btn-orange btn-full mt-4" style={{ width: '100%', padding: '12px', fontWeight: 'bold' }} onClick={handleFinalExit}>
-              Ga verder
+              Druk op de oranje knop om terug te gaan naar je Hyperloop
             </button>
           </div>
         </div>

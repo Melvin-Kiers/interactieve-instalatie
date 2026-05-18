@@ -963,7 +963,7 @@ const S = {
     display: "flex",
     alignItems: "center",
     gap: 8,
-    background: "rgba(255,255,255,0.06)",
+    background: "#ce3939",
     border: "1px solid rgba(255,255,255,0.12)",
     borderRadius: 10,
     color: "#fff",
@@ -1270,14 +1270,14 @@ const S = {
 const PARTS = [
   {
     id: 1,
-    name: "Car",
-    discription: "Gaat met zo'n 700km/u door een vacuum buis met zijn scherpe neus die naar beneden richt",
+    name: "Hyperloop Bliksem",
+    discription: "Rijdt super snel (700 km/u) door een buis, met zijn punt naar beneden",
     svgString: `<svg width="1199" height="174" viewBox="0 0 1199 174" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M844 0H46.9447C36.376 0 26.1998 4.00451 18.4655 11.2071C12.6117 16.6585 8.44542 23.6753 6.46151 31.4244L5.51551 35.1195C1.97857 48.9346 3.96646 63.5844 11.057 75.9574L16.3269 85.1536C22.0433 95.1287 29.8197 103.771 39.1382 110.505L100.779 155.051C117.825 167.369 138.32 174 159.351 174H1181.16C1185.51 174 1189.65 172.125 1192.51 168.855C1196.46 164.362 1197.38 157.966 1194.87 152.54L1194.75 152.274C1193.29 149.131 1190.83 146.562 1187.75 144.977L1044.5 71.2046L938.614 12.5311C923.782 4.31215 907.103 0 890.146 0H844Z" fill="__COLOR__"/><path d="M56 122.5L938 127L943.162 126.362C968.431 123.239 991.557 110.594 1007.82 91.0073L1031.5 62.5L1042.5 69.5L1017.5 143.5H937L82.5 141L56 122.5Z" fill="#FCA422"/><path d="M58 124.5L940 129L945.162 128.362C970.431 125.239 993.557 112.594 1009.82 93.0073L1033.5 64.5L1044.5 71.5L1019.5 145.5H939L84.5 143L58 124.5Z" fill="white"/><path d="M1194.87 152.54L1194.75 152.282C1193.29 149.134 1190.82 146.563 1187.74 144.98L1044.5 71.5L1020.74 104.444C1002.38 129.911 972.897 145 941.5 145L539 143H85.5L100.381 154.116C117.662 167.025 138.655 174 160.226 174H1181.16C1185.51 174 1189.65 172.125 1192.51 168.855C1196.46 164.362 1197.38 157.966 1194.87 152.54Z" fill="black"/><rect x="220" y="36.5" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><rect x="314" y="36.5" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><rect x="615" y="36.5" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><rect x="710" y="36.5" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><rect x="804" y="36.5" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><path d="M470 60.5C478.837 60.5 486 67.6634 486 76.5V129.5H454V76.5C454 67.6634 461.163 60.5 470 60.5Z" fill="white" stroke="white" stroke-width="5"/></svg>`
   },
   {
     id: 2,
-    name: "Train",
-    discription: "Gaat met zo'n 700km/u door een vacuum buis met zijn scherpe neus die naar het midden richt",
+    name: "Hyperloop Snelvleugel",
+    discription: "Rijdt super snel (700 km/u) door een buis, met zijn punt recht vooruit",
     svgString: `<svg width="1188" height="175" viewBox="0 0 1188 175" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M844 0H46.9447C36.376 0 26.1998 4.00451 18.4655 11.2071C12.6117 16.6585 8.44542 23.6754 6.4615 31.4244L5.51551 35.1195C1.97857 48.9346 3.96646 63.5844 11.057 75.9574L16.3269 85.1536C22.0433 95.1287 29.8197 103.771 39.1382 110.505L100.779 155.051C117.825 167.369 138.32 174 159.351 174H1050.7C1072.62 174 1093.94 166.794 1111.37 153.49L1180.41 100.795C1184.37 97.7736 1184.63 91.9091 1180.96 88.5419L1113.18 26.329C1094.74 9.39557 1070.61 0.000112005 1045.56 9.38629e-05L916 0H844Z" fill="__COLOR__"/><path d="M57 122.5L939 127L1039.24 125.886C1061.75 125.636 1083.52 117.798 1101.02 103.64L1152.5 62.0001L1157.5 68.5001L1108 118.5L1018.5 143.5H938L83.5 141L57 122.5Z" fill="#FCA422"/><path d="M59 124.5L941 129H1038.08C1060.08 129 1081.46 121.749 1098.92 108.368L1155.5 65.0001L1166 75.0001L1104.5 143.5L940 145.5L85 143.5L59 124.5Z" fill="white"/><rect x="220" y="36.5001" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><rect x="314" y="36.5001" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><rect x="615" y="36.5001" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><rect x="710" y="36.5001" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><rect x="804" y="36.5001" width="37" height="71" rx="10.5" stroke="white" stroke-width="3"/><path d="M470 60.5001C478.837 60.5001 486 67.6636 486 76.5001V129.5H454V76.5001C454 67.6636 461.163 60.5001 470 60.5001Z" fill="white" stroke="white" stroke-width="5"/><path d="M1182.76 90.2395L1166 75.0001L1128.5 108.5L1124.24 112.953C1105.84 132.186 1080.54 143.292 1053.93 143.811L993 145H943L540.5 143L85 143.5L102.428 155.92C119.385 168.005 139.692 174.494 160.515 174.483L1053.29 174.018C1075.77 174.007 1097.59 166.421 1115.23 152.486L1182.45 99.3872C1185.35 97.0901 1185.51 92.7323 1182.76 90.2395Z" fill="black"/><circle cx="1038" cy="72.0001" r="32" fill="black"/></svg>`
   }
 ];
@@ -1499,7 +1499,7 @@ useEffect(() => {
               </p>
 
               <p style={{ opacity: 0.6, marginTop: 10 }}>
-                Hyperloops zijn supersnelle transportsystemen van de toekomst 🚄
+                Hyperloops zijn soort van hele snelle treinen van de toekomst
                 waarbij capsules door buizen reizen met extreem hoge snelheid.
               </p>
 
@@ -1511,18 +1511,33 @@ useEffect(() => {
                   flexWrap: "wrap"
                 }}
               >
+
+                <button
+                  onClick={onReset}
+                  style={{
+                    padding: "12px 20px",
+                    borderRadius: 999,
+                    border: "none",
+                    background: "#ce3939",
+                    color: "#fff",
+                    cursor: "pointer"
+                  }}
+                >
+                  Begin opnieuw
+                </button>
+
                 <button
                   onClick={() => navigate("/games")}
                   style={{
                     padding: "12px 20px",
                     borderRadius: 999,
                     border: "none",
-                    background: "#ff8c42",
+                    background: "#FF6B35",
                     color: "#fff",
                     cursor: "pointer"
                   }}
                 >
-                  🎮 Minigames
+                Ga naar de Minigames
                 </button>
 
                 {/* <button
@@ -1538,20 +1553,6 @@ useEffect(() => {
                 >
                   ✏️ Verder bewerken
                 </button> */}
-
-                <button
-                  onClick={onReset}
-                  style={{
-                    padding: "12px 20px",
-                    borderRadius: 999,
-                    border: "none",
-                    background: "#1e293b",
-                    color: "#fff",
-                    cursor: "pointer"
-                  }}
-                >
-                  🔄 Opnieuw beginnen
-                </button>
               </div>
 
             </div>
@@ -1565,16 +1566,22 @@ useEffect(() => {
   return (
     <div style={S.root}>
       <div style={S.topBar}>
-        <button style={S.backBtn} onClick={onReset}>← Terug naar start</button>
+        <button style={S.backBtn} onClick={onReset}>Terug naar start</button>
         <div style={S.logo}>
-          <svg style={S.logoIcon} viewBox="0 0 32 32" fill="none">
-            <path d="M8 16c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6" stroke="#FF6B35" strokeWidth="2.5" strokeLinecap="round"/>
-            <path d="M24 16c0 3.3-2.7 6-6 6" stroke="#FF6B35" strokeWidth="2.5" strokeLinecap="round"/>
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_653_6235)">
+            <path d="M24.0004 0C37.253 0.000191021 48 10.7503 48 24C48 37.2497 37.253 47.9998 24.0004 48C10.7476 48 0 37.2498 0 24C1.406e-05 10.7502 10.7476 0 24.0004 0ZM24.0004 2.28251C12.0231 2.28251 2.28006 12.0181 2.28004 24C2.28004 35.9819 12.0231 45.7175 24.0004 45.7175C28.7173 45.7174 33.0865 44.2048 36.6516 41.6412C34.2031 42.7577 31.4817 43.3815 28.6139 43.3815C17.903 43.3815 9.22695 34.7049 9.22695 24C9.22695 13.2951 17.9121 4.61923 28.6139 4.61923C31.4817 4.61928 34.2032 5.24161 36.6516 6.35802C33.0866 3.79454 28.7171 2.28258 24.0004 2.28251ZM28.6139 6.90096C19.1877 6.90096 11.507 14.5721 11.507 24C11.507 33.4279 19.1786 41.099 28.6139 41.099C32.8981 41.0989 36.8184 39.5169 39.8222 36.9074C37.9632 37.7885 35.884 38.2821 33.6885 38.2821C25.782 38.2821 19.3769 31.8883 19.3769 24C19.3769 16.1118 25.7911 9.71794 33.6885 9.71786C35.8841 9.71786 37.9639 10.2113 39.8229 11.0926C36.8191 8.48283 32.8983 6.90104 28.6139 6.90096ZM33.6885 12.0004C27.0485 12.0004 21.657 17.3797 21.6569 24C21.6569 30.6203 27.0485 36.0004 33.6885 36.0004C40.3284 36.0004 45.72 30.6204 45.72 24C45.7199 17.3797 40.3193 12.0004 33.6885 12.0004Z" fill="#F6653A"/>
+            </g>
+            <defs>
+            <clipPath id="clip0_653_6235">
+            <rect width="48" height="48" fill="white"/>
+            </clipPath>
+            </defs>
           </svg>
           HYPERLOOP
         </div>
         <div style={S.modeBadge}>
-          <div style={S.dot} /> Ontwerpmodus &nbsp; ✏️
+          <div style={S.dot} /> Tekenmodus
         </div>
       </div>
 
@@ -1610,11 +1617,11 @@ useEffect(() => {
             <button style={S.toolBtn(tool === "eraser")} onClick={() => setTool("eraser")}>🧽 Wissen</button>
             <button style={S.deleteBtn} onClick={clearAll}>🗑️ Alles wissen</button>
           </div>
-<div style={S.submitRow}>
-  <button style={S.submitBtn} onClick={handleSubmit}>
-    Verder gaan →
-  </button>
-</div>
+          <div style={S.submitRow}>
+            <button style={S.submitBtn} onClick={handleSubmit}>
+              Druk op de oranje knop om door te gaan
+            </button>
+          </div>
         </div>
 
         <div style={S.rightPanel}>

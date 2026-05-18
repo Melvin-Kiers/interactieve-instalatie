@@ -27,8 +27,7 @@ export default function NameInput({ setUsername }) {
         </h1>
 
         <p className="subtitle">
-          Bouw. Speel. Leer.<br />
-          Teken je eigen Hyperloop en ontdek hoe deze werkt.
+          Teken je eigen <strong>Hyperloop</strong> en ontdek hoe deze werkt.
         </p>
 
         <div className="input_group">
@@ -41,11 +40,11 @@ export default function NameInput({ setUsername }) {
           />
 
           <button onClick={handleSubmit}>
-            Enter →
+            Druk de oranje knop om door te gaan
           </button>
         </div>
 
-        <p className="hint">Druk op Enter om verder te gaan</p>
+        {/* <p className="hint">Druk op Enter om verder te gaan</p> */}
       </div>
     </div>
   );

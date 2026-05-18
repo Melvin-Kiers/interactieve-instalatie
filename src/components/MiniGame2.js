@@ -213,7 +213,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
           <span className="speed-value">{speedKmH}</span>
           <span className="speed-unit"> km/u</span>
         </div> 
-        <p>↑ / ↓ om te wisselen</p>
+        {/* <p>↑ / ↓ om te wisselen</p> */}
       </div>
 
       <div className="game-wrapper2">
@@ -301,7 +301,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
                 navigate("/games");
               }}
             >
-              Terug naar GameHub
+              Druk op de oranje knop om terug te gaan naar je Hyperloop
             </button>
           </div>
         </div>

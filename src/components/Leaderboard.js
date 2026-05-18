@@ -85,8 +85,8 @@ export default function Leaderboard({ onReset }) {
         </div>
 
         <div className="text-center mt-5">
-          <button className="btn-restart-neon" onClick={handleRestart}>
-            NIEUWE MISSIE STARTEN
+          <button className="btn-orange" onClick={handleRestart} style={{ fontSize: "20px" }}> 
+            Nieuwe missie starten / Terug naar start
           </button>
         </div>
       </div>

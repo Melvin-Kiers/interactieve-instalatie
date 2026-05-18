@@ -246,9 +246,9 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
             <span className="speed-value">{Math.round(velocity * 100)}</span>
             <span className="speed-unit"> km/u</span>
           </div> */}
-          <p>
+          {/* <p>
             <strong>SPATIE</strong> ingedrukt is vooruit, los laten is achteruit
-          </p>
+          </p> */}
         </div>
 
         <div className="game-bar-wrapper3">
@@ -296,8 +296,8 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
                 {result.points === 100 ? "Perfecte Stabiliteit!" : `+${result.points} punten`}
               </h2>
               <h3>Totaal: {result.total}</h3>
-              <button className="btn btn-success btn-lg mt-2" onClick={nextRound}>
-                {round >= maxRounds ? "Resultaat bekijken" : "Volgende ronde"}
+              <button className="btn btn-orange btn-lg mt-2" onClick={nextRound}>
+                {round >= maxRounds ? "Resultaat bekijken" : "Druk op de oranje knop voor de volgende ronde!"}
               </button>
             </div>
           ) : null}
@@ -317,7 +317,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
                 width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#000',
                 boxShadow: '0 4px 15px rgba(0,0,0,0.3)', lineHeight: 0 
               }}>
-                <video className="explainVideo-2" src={uitlegVideoMiniGame3} autoPlay loop playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />    
+                <video className="explainVideo-2" src={uitlegVideoMiniGame3} autoPlay playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />    
               </div>
             </div>
 
@@ -326,7 +326,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
               style={{ width: '100%', padding: '12px', fontWeight: 'bold' }} 
               onClick={handleFinalExit}
             >
-              Terug naar GameHub
+              Druk op de oranje knop om terug te gaan naar je Hyperloop
             </button>
           </div>
         </div>

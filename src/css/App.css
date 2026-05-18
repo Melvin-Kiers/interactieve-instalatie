@@ -600,7 +600,7 @@ canvas {
 }
 
 .game-card.disabled::after {
-  content: "🔒 Gespeeld";
+  content: "🔒 Voltooid!";
   position: absolute;
   top: 10px;
   right: 10px;
@@ -896,7 +896,10 @@ h1 span {
   text-transform: uppercase;
 }
 
-/* Een subtiele animatie als de snelheid verandert */
 .speed-value {
   transition: all 0.5s ease;
+}
+
+.game-card strong {
+  font-size: 20px;
 }
