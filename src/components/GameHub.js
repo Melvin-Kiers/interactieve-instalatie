@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 
 export default function GameHub({ username, score, playedGames, saveToLeaderboard }) {
   const navigate = useNavigate();
-  const audioRef = useRef(null); // Gebruik een ref in plaats van een globale variabele
+  const audioRef = useRef(null);
 
   const games = [
     { id: 1, name: "Rem precies goed", route: "/games/uitleg/1", color: "blauwe" },
@@ -18,7 +18,7 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
   const allGamesPlayed = playedGames.length >= games.length;
 
   useEffect(() => {
-    // Initialiseer audio alleen binnen de component
+    
     if (!audioRef.current) {
       audioRef.current = new Audio(musicFile);
       audioRef.current.loop = true;
@@ -37,7 +37,7 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
-        audioRef.current.src = ""; // Forceer de browser om de audio-stream los te laten
+        audioRef.current.src = "";
         audioRef.current.load();
         audioRef.current = null;
       }
@@ -88,7 +88,7 @@ export default function GameHub({ username, score, playedGames, saveToLeaderboar
           loop 
           muted 
           playsInline
-          preload="none" // Voorkomt dat de browser de hele video al in het RAM pompt
+          preload="none"
         >
           <source src={video} type="video/mp4" />
         </video>

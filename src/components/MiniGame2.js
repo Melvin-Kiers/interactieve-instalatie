@@ -29,7 +29,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const roundLock = useRef(false);
 
   const count = 60;
-  const maxRounds = 5;
+  const maxRounds = 15;
 
   useEffect(() => {
     const storedImage = localStorage.getItem("hyperloopImage");

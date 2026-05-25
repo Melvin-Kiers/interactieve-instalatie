@@ -7,7 +7,7 @@ import minigamesData from '../data/minigamesData';
 const MiniGameIntro = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const videoRef = useRef(null); // Ref om de video netjes te stoppen bij vertrek
+  const videoRef = useRef(null);
 
   const game = minigamesData.find(g => g.id === Number(id));
 
@@ -18,7 +18,6 @@ const MiniGameIntro = () => {
     };
     window.addEventListener("keydown", handleKeyDown);
 
-    // CLEANUP: Voorkom crashes door de video-stream hard te sluiten
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       if (videoRef.current) {
@@ -45,7 +44,6 @@ const MiniGameIntro = () => {
                   ref={videoRef}
                   className="game-video shadow" 
                   autoPlay 
-                  // muted is verwijderd zodat je de uitleg hoort!
                   loop 
                   playsInline
                 >
@@ -59,7 +57,7 @@ const MiniGameIntro = () => {
             </div>
           </div>
 
-          {/* RECHTERKANT (Sidebar) */}
+          
           <div className="col-md-4 sidebar-custom d-flex flex-column p-5">
             <div className="flex-grow-1">
               <h2 className="text-white text-center mb-0">Besturing</h2>

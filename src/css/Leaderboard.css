@@ -64,6 +64,7 @@
   font-weight: bold;
   font-size: 1.5rem;
   box-shadow: 0 0 15px #00ffff;
+  background: #00ffff;
 }
 
 .rank-1 .podium-card { border-color: gold; box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); }

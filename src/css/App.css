@@ -1,4 +1,4 @@
-/* Algemeen */
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #000000;
@@ -29,7 +29,7 @@ body {
   padding: 0px;
 }
 
-/* Naam invoer */
+
 .name-input {
   display: flex;
   flex-direction: column;
@@ -60,7 +60,7 @@ body {
   box-shadow: 0 0 5px rgba(58, 134, 255, 0.5);
 }
 
-/* Hyperloop Designer */
+
 .designer-header {
   display: flex;
   justify-content: space-between;
@@ -87,8 +87,8 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 👈 verticaal centreren */
-  align-items: center;     /* horizontaal centreren */
+  justify-content: center; 
+  align-items: center;     
   text-align: center;
 }
 
@@ -107,7 +107,7 @@ button:hover {
   background-color: #dc2626;
 }
 
-/* Onderdeel en penseel kleur keuzes */
+
 .color-picker {
   display: flex;
   gap: 40px;
@@ -137,7 +137,7 @@ button:hover {
   border: 3px solid black;
 }
 
-/* Canvas */
+
 canvas {
   /* border: 2px solid #1f2937; */
   border-radius: 8px;
@@ -145,7 +145,7 @@ canvas {
   background-color: #ffffff;
 }
 
-/* Onderdeel keuze scherm */
+
 .part-selection {
   display: flex;
   flex-direction: column;
@@ -181,8 +181,8 @@ canvas {
 }
 
 .part-item {
-  position: relative;       /* belangrijk voor absolute child */
-  display: inline-block;    /* zodat width respecteert content */
+  position: relative;       
+  display: inline-block;    
   transition: transform 0.2s ease;
 }
 
@@ -228,7 +228,7 @@ canvas {
   font-size: 14px;
 }
 
-/* Submit knop */
+
 .submit-btn {
   margin-top: 20px;
   padding: 10px 30px;
@@ -245,7 +245,7 @@ canvas {
   background-color: #2650c1;
 }
 
-/* Resultaat scherm */
+
 .result {
   display: flex;
   flex-direction: column;
@@ -367,7 +367,7 @@ canvas {
   background: #001b2e;
 }
 
-/* 🌄 PARALLAX */
+
 .parallax {
   position: absolute;
   width: 100%;
@@ -379,7 +379,7 @@ canvas {
 .layer {
   position: absolute;
   left: 0;
-  bottom: 0; /* 👈 dit is de belangrijkste wijziging */
+  bottom: 0;
   width: 5000%;
   height: 300px;
 
@@ -389,7 +389,7 @@ canvas {
 }
 
 
-/* 👇 vervang dit met jouw assets */
+
 .layer-back {
   background-image: url("../assets/bg-back.png");
   height: 100vh;
@@ -415,25 +415,24 @@ canvas {
   height: 45vh;
 }
 
-/* PLAYER */
+
 .player-wrapper {
   position: absolute;
   left: 35%;
   transform: translateX(-55%);
-  /* Gebruik vh voor de grootte zodat het meeschaalt met de bg */
   width: 12vh; 
   height: 15vh;
   z-index: 10;
 }
 
 .player {
-  width: 350%; /* Vul de wrapper op */
+  width: 350%;
   height: auto;
   position: relative;
   z-index: 2;
 }
 
-/* Vergeet de obstakels niet! Die moeten ook meeschalen */
+
 .obstacle {
   position: absolute;
   width: 8vh;
@@ -442,7 +441,7 @@ canvas {
   z-index: 5;
 }
 
-/* MAGNETS */
+
 .magnet {
   position: absolute;
   left: 50%;
@@ -459,10 +458,10 @@ canvas {
 
 @keyframes slide {
   from {
-    transform: translateX(0vw); /* start off-screen right */
+    transform: translateX(0vw);
   }
   to {
-    transform: translateX(-100px); /* move past left */
+    transform: translateX(-100px);
   }
 }
 
@@ -486,7 +485,7 @@ canvas {
   box-shadow: 0 0 15px #00ffff;
 }
 
-/* HUD */
+
 .text-section-game {
   position: absolute;
   top: 10px;
@@ -499,7 +498,7 @@ canvas {
   backdrop-filter: blur(4px);
 }
 
-/* GAME OVER */
+
 .game-over-overlay {
   position: fixed;
   top: 0;
@@ -595,7 +594,7 @@ canvas {
   opacity: 0.5;
   filter: grayscale(1);
   cursor: not-allowed;
-  pointer-events: none; /* Dit zorgt dat de onClick niet meer werkt */
+  pointer-events: none;
   position: relative;
 }
 
@@ -778,7 +777,7 @@ canvas {
   font-family: system-ui, sans-serif;
 }
 
-/* donkere gradient overlay voor leesbaarheid */
+
 .overlay {
   position: absolute;
   inset: 0;
@@ -786,7 +785,7 @@ canvas {
   z-index: 0;
 }
 
-/* centrale content */
+
 .content {
   position: relative;
   z-index: 1;
@@ -800,7 +799,7 @@ canvas {
   padding: 20px;
 }
 
-/* headline */
+
 h1 {
   font-size: 3rem;
   font-weight: 700;
@@ -824,17 +823,17 @@ h1 span {
   font-size: 18px;
 }
 
-/* subtitel */
+
 .subtitle {
   opacity: 0.8;
   font-size: 1.1rem;
   margin-bottom: 40px;
 }
 
-/* input + knop */
+
 .input_group {
   display: flex;
-  gap: 10px;
+  gap: 48px;
   background: rgba(255,255,255,0.05);
   padding: 8px;
   border-radius: 999px;
@@ -847,19 +846,20 @@ h1 span {
   padding: 12px 16px;
   background: transparent;
   color: white;
-  font-size: 16px;
+  font-size: 20px;
   width: 220px;
 }
 
 .input_group button {
   background: #f6653a;
   border: none;
-  padding: 12px 18px;
+  padding: 32px 48px;
   border-radius: 999px;
   color: white;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  font-size: 20px;
 }
 
 .input_group button:hover {
@@ -878,7 +878,7 @@ h1 span {
   display: inline-block;
   padding: 5px 15px;
   border-radius: 50px;
-  border: 2px solid #00d4ff; /* Hyperloop blauw */
+  border: 2px solid #00d4ff;
   margin: 10px 0;
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
 }
@@ -887,7 +887,7 @@ h1 span {
   font-size: 1.8rem;
   font-weight: bold;
   color: #00d4ff;
-  font-family: 'Courier New', Courier, monospace; /* Monospaced staat stoer voor getallen */
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .speed-unit {

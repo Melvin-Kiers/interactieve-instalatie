@@ -40,7 +40,7 @@ export default function NameInput({ setUsername }) {
           />
 
           <button onClick={handleSubmit}>
-            Druk de oranje knop om door te gaan
+            En druk op de oranje knop om door te gaan
           </button>
         </div>
 

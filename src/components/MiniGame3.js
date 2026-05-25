@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import hyperloopBgGame3 from "../assets/bg-minigame-3.png";
-import video from "../assets/videos/test.mp4";
 import backgroundMusic from "../assets/sounds/minigame3.mp3";
 import uitlegVideoMiniGame3 from "..//assets/videos/UitlegVideoMiniGame3.mp4";
 
