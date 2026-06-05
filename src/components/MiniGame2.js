@@ -4,6 +4,7 @@ import Countdown from "./Countdown";
 // import video from "../assets/videos/bg-video.mp4";
 import uitlegVideoMiniGame2 from "..//assets/videos/UitlegVideoMiniGame2.mp4";
 import backgroundMusic from "../assets/sounds/minigame2.mp3";
+import "../css/Gamehud.css";
 
 export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const [gameOver, setGameOver] = useState(false);
   const [hasScored, setHasScored] = useState(false);
   const [isHit, setIsHit] = useState(false);
+  const [waveHit, setWaveHit] = useState(false);
 
   const [magnetTopActive, setMagnetTopActive] = useState(false);
 
@@ -29,7 +31,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const roundLock = useRef(false);
 
   const count = 60;
-  const maxRounds = 15;
+  const maxRounds = 25;
 
   useEffect(() => {
     const storedImage = localStorage.getItem("hyperloopImage");
@@ -41,7 +43,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   }, [running]);
 
   // Snelheid berekeningen
-  const baseSpeed = 1;
+  const baseSpeed = 2;
   const steps = Math.floor((round - 1) / 2);
   const speedMultiplier = 1 + steps * 0.25;
   const speed = baseSpeed * speedMultiplier;
@@ -54,6 +56,8 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     setWaveLane(Math.floor(Math.random() * 2));
     setWaveX(window.innerWidth + 200);
     setHasScored(false);
+    setWaveHit(false);
+
   };
 
   const finishGame = () => {
@@ -147,12 +151,16 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
 
     if (xHit && !hasScored) {
       if (isSameLane) {
-        setScore((s) => Math.max(0, s - 5));
+        // Door de wave heen = punten krijgen
+        setScore((s) => s + 10);
         setHasScored(true);
+
         setIsHit(true);
+        setWaveHit(true);
+
         setTimeout(() => setIsHit(false), 300);
       } else {
-        setScore((s) => s + 5);
+        // Wave missen = geen punten
         setHasScored(true);
       }
     }
@@ -202,18 +210,41 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
         <Countdown onComplete={() => setRunning(true)} />
       )}
 
-      <div className="text-section-game">
-        <h1>Magnet Switch</h1>
-        <h3>Ronde {round} / {maxRounds}</h3>
-        <h3 style={{ color: isHit ? "red" : "white", transition: "color 0.2s" }}>
-          Score: {score}
-        </h3>
-        {/* <h4>Snelheid: {speed.toFixed(2)}x</h4> */}
-        <div className="speedometer">
-          <span className="speed-value">{speedKmH}</span>
-          <span className="speed-unit"> km/u</span>
-        </div> 
-        {/* <p>↑ / ↓ om te wisselen</p> */}
+      <div className="hud-root">
+        <div className="hud-title-center">Minigame 2: <br/> <span className="italic">Magneet Wisselen</span></div>
+
+        <div className="hud-panel hud-score">
+          <div className="hud-label">Punten</div>
+          <div className="hud-value" style={{ color: isHit ? "#4ade80" : "white", transition: "color 0.2s" }}>
+            {score.toLocaleString("nl-NL")}
+          </div>
+        </div>
+
+        <div className="hud-panel hud-round">
+          <div className="hud-label">Ronde</div>
+          <div className="hud-value hud-amber">{round} / {maxRounds}</div>
+          <div className="hud-pips">
+            {Array.from({ length: maxRounds }, (_, i) => (
+              <div key={i} className={`hud-pip ${i < round - 1 ? "done" : i === round - 1 ? "current" : ""}`} />
+            ))}
+          </div>
+        </div>
+
+        <div className="hud-panel hud-speed">
+          <div>
+            <div className="hud-label">Snelheid</div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+              <span className="hud-speed-number">{speedKmH}</span>
+              <span className="hud-speed-unit">km/u</span>
+            </div>
+          </div>
+          <div className="hud-speed-bar-wrap">
+            <div className="hud-speed-bar-label">max {100 + (Math.floor((maxRounds - 1) / 2) * 50)} km/u</div>
+            <div className="hud-speed-track">
+              <div className="hud-speed-fill" style={{ width: `${Math.min((speedKmH / (100 + Math.floor((maxRounds - 1) / 2) * 50)) * 100, 100)}%` }} />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="game-wrapper2">
@@ -230,8 +261,17 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
           style={{
             left: `${waveX}px`,
             bottom: waveIsBottom ? "21vh" : "12vh",
-            display: waveX < -500 ? 'none' : 'block',
-            filter: isHit && isBottom === waveIsBottom ? "brightness(2) saturate(2)" : "none"
+            display: waveX < -500 ? "none" : "block",
+
+            opacity: waveHit ? 0 : 1,
+            transform: waveHit ? "scale(0.6)" : "scale(1)",
+
+            transition: "opacity 0.4s ease, transform 0.4s ease",
+
+            filter:
+              waveHit
+                ? "brightness(1.5) hue-rotate(90deg)"
+                : "none"
           }}
         />
 
@@ -241,7 +281,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
             style={{
               bottom: isBottom ? "18vh" : "9vh",
               transition: "bottom 0.2s ease",
-              opacity: isHit ? 0.5 : 1
+              filter: isHit ? "drop-shadow(0 0 20px #00ff00)" : "none"
             }}
           >
             <img src={image} className="player" alt="hyperloop" />

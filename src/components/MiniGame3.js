@@ -3,13 +3,16 @@ import { useNavigate } from "react-router-dom";
 import hyperloopBgGame3 from "../assets/bg-minigame-3.png";
 import backgroundMusic from "../assets/sounds/minigame3.mp3";
 import uitlegVideoMiniGame3 from "..//assets/videos/UitlegVideoMiniGame3.mp4";
+import Countdown from "./Countdown";
 
 export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const navigate = useNavigate();
 
   const maxRounds = 5;
   const [round, setRound] = useState(1);
-  const [running, setRunning] = useState(true);
+  
+  const [running, setRunning] = useState(false); 
+  
   const [result, setResult] = useState(null);
   const [finalScore, setFinalScore] = useState(0);
   const [image, setImage] = useState(null);
@@ -39,7 +42,7 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     if (storedImage) setImage(storedImage);
 
     const down = (e) => {
-      if (gameOver) return;
+      if (gameOver || !running) return;
       if (e.code === "Space") setHolding(true);
     };
     const up = (e) => {
@@ -52,9 +55,8 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
       window.removeEventListener("keydown", down);
       window.removeEventListener("keyup", up);
     };
-  }, [gameOver]);
+  }, [gameOver, running]);
 
-  // New round setup
   useEffect(() => {
     if (gameOver) return;
     const startPos = Math.floor(Math.random() * 30) + 35;
@@ -71,7 +73,11 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     setResult(null);
     setTimer(5);
     setHasScoredThisRound(false);
-    setRunning(true);
+    
+
+    if (round > 1) {
+      setRunning(true);
+    }
   }, [round, gameOver]);
 
   // Timer & Moving Target Logic
@@ -130,7 +136,6 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   }, [running, holding, velocity, gameOver]);
 
   const finishRound = () => {
-    // Beveiliging tegen dubbel scoren
     setHasScoredThisRound((alreadyScored) => {
       if (alreadyScored) return true;
 
@@ -174,7 +179,6 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     }
   };
 
-  // Pas echt afsluiten
   const handleFinalExit = () => {
     updateScore(finalScore);
     markGameAsPlayed(3);
@@ -184,13 +188,12 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   useEffect(() => {
     const audio = document.getElementById("bg-music");
     if (audio) {
-      audio.volume = 0.3; // Zet het volume op 30% zodat het niet te hard is
+      audio.volume = 0.3;
       audio.play().catch(error => {
         console.log("Autoplay werd geblokkeerd. Muziek start na eerste klik.");
       });
     }
 
-    // Cleanup: Stop muziek als de gebruiker de pagina verlaat
     return () => {
         if (audio) {
           audio.pause();
@@ -201,53 +204,69 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     useEffect(() => {
     const audio = document.getElementById("bg-music");
     if (gameOver && audio) {
-      // Fade out of stop de muziek direct
       audio.pause();
     }
   }, [gameOver]);
 
   useEffect(() => {
-  const handleKeyDown = (e) => {
-    if (e.key !== "ArrowRight") return;
+    const handleKeyDown = (e) => {
+      if (e.key !== "ArrowRight") return;
 
-    if (gameOver) {
-      handleFinalExit();
-      return;
-    }
+      if (gameOver) {
+        handleFinalExit();
+        return;
+      }
 
-    if (result) {
-      nextRound();
-      return;
-    }
-  };
+      if (result) {
+        nextRound();
+        return;
+      }
+    };
 
-  document.addEventListener("keydown", handleKeyDown, true);
-
-  return () => {
-    document.removeEventListener("keydown", handleKeyDown, true);
-  };
-}, [result, gameOver]);
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown, true);
+    };
+  }, [result, gameOver]);
 
   return (
     <div className="minigame-container" style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
       <audio id="bg-music" src={backgroundMusic} loop />
       <img src={hyperloopBgGame3} className="bg-image-game-3" alt="background" />
       
+      {!running && !gameOver && !result && round === 1 && (
+        <Countdown onComplete={() => setRunning(true)} />
+      )}
+
       <div className="game-screen text-center mt-4">
-        <div className="text-section-game">
-          <h1>Houdt de <br />Hyperloop stabiel</h1>
-          <h3 className="mb-0">Ronde {round} / {maxRounds}</h3>
-          <div className={`timer-display ${timer < 1.5 ? "text-danger animate-pulse" : ""}`} 
-             style={{ fontSize: '2.5rem', fontWeight: 'bold', height: '60px' }}>{timer}s
+        <div className="hud-root">
+          <div className="hud-title-center">Minigame 3: <br/> <span className="italic">Hyperloop Stabiel Houden</span></div>
+
+          <div className="hud-panel hud-score">
+            <div className="hud-label">Punten</div>
+            <div className="hud-value">
+              {finalScore.toLocaleString("nl-NL")}
+            </div>
           </div>
-          <h4>Score: {finalScore}</h4>
-          {/* <div className="speedometer">
-            <span className="speed-value">{Math.round(velocity * 100)}</span>
-            <span className="speed-unit"> km/u</span>
-          </div> */}
-          {/* <p>
-            <strong>SPATIE</strong> ingedrukt is vooruit, los laten is achteruit
-          </p> */}
+
+          <div className="hud-panel hud-round">
+            <div className="hud-label">Ronde</div>
+            <div className="hud-value hud-amber">{round} / {maxRounds}</div>
+            <div className="hud-pips">
+              {Array.from({ length: maxRounds }, (_, i) => (
+                <div key={i} className={`hud-pip ${i < round - 1 ? "done" : i === round - 1 ? "current" : ""}`} />
+              ))}
+            </div>
+          </div>
+
+          <div className={`hud-panel hud-speed ${timer < 1.5 ? "hud-timer-danger" : ""}`}>
+            <div className="hud-label">Tijd over:</div><br/>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+              <span className="hud-speed-number-timer" style={{ color: timer < 1.5 ? "#f87171" : "var(--hud-amber)" }}>
+                {Number(timer).toFixed(2)}
+              </span>
+            </div>
+          </div>
         </div>
 
         <div className="game-bar-wrapper3">

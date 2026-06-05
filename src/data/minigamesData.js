@@ -14,7 +14,7 @@ const minigamesData = [
     description: "Houd je voet bij de rem! Je vliegt door de buis en moet precies in het groene vlak stoppen. Gebruik de spatiebalk om op tijd te remmen. Maar pas op: elke ronde ga je harder en wordt je remweg langer. Kun jij de Hyperloop op tijd stilzetten?",
     video: uitleg1,
     controls: [
-      { icon: buttonBlue, label: "Door op de blauwe knop te drukken rem je!", size: "40px" }
+      { icon: buttonBlue, label: "Door op de blauwe knop te drukken rem je!", size: "50px" }
     ],
   },
   {
@@ -23,13 +23,13 @@ const minigamesData = [
     description: "Race door een futuristische tunnel! Je Hyperloop gaat vanzelf vooruit, maar pas op voor de blauwe cirkels (drukgolven). Wissel snel van baan om ze te ontwijken. Maar pas op je gaat steeds sneller als je verder komt. Bij een botsing verlies je punten, dus pas op!",
     video: uitleg2,
     controls: [
-      { icon: buttonGreen, label: "Druk op de groene knop om omhoog te gaan!", size: "40px" },
-      { icon: buttonBlack, label: "Druk op de zwarte knop om omhoog te gaan!", size: "40px" }
+      { icon: buttonGreen, label: "Druk op de groene knop om omhoog te gaan!", size: "50px" },
+      { icon: buttonBlack, label: "Druk op de zwarte knop om omlaag te gaan!", size: "50px" }
     ]
   },
   {
     id: 3,
-    title: "Houdt de Hyperloop stabiel",
+    title: "Centreer de Hyperloop",
     description: "Houd de Hyperloop stabiel! Gebruik de spatiebalk om naar voren te vliegen en laat los om weer terug te zakken. Zorg dat je precies in het groene vak staat wanneer de tijd om is voor de maximale score. Pas op: het vak staat elke ronde op een andere plek!",
     video: uitleg3,
     controls: [

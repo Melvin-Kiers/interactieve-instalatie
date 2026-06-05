@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/MiniGameIntro.css';
@@ -8,25 +8,42 @@ const MiniGameIntro = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const videoRef = useRef(null);
+  const [buttonsVisible, setButtonsVisible] = useState(false);
 
   const game = minigamesData.find(g => g.id === Number(id));
 
   useEffect(() => {
-    // Luister naar Enter toets
-    const handleKeyDown = (e) => {
-      if (e.key === "ArrowRight") navigate(`/game/${id}`);
-    };
-    window.addEventListener("keydown", handleKeyDown);
+  const handleKeyDown = (e) => {
+    if (!buttonsVisible) return;
 
+    if (e.key === "ArrowRight") navigate(`/game/${id}`);
+    if (e.key === "ArrowLeft") navigate(`/games`);
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+
+  return () => {
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, [id, navigate, buttonsVisible]);
+
+  useEffect(() => {
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
       if (videoRef.current) {
         videoRef.current.pause();
         videoRef.current.src = "";
         videoRef.current.load();
       }
     };
-  }, [id, navigate]);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setButtonsVisible(true);
+    }, 8500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   if (!game) return <div className="text-white text-center mt-5">Game niet gevonden</div>;
 
@@ -37,9 +54,12 @@ const MiniGameIntro = () => {
           <div className="col-md-8 d-flex flex-column align-items-center justify-content-center position-relative">            
             <div className="white-card shadow-lg d-flex flex-column align-items-center p-0">
               
-              <h1 className="display-4 fw-bold mb-4 main-title">{game.title}</h1>
+              <h1 className="display-4 fw-bold mb-4 main-title pop-up">{game.title}</h1>
               
-              <div className="video-overflow-container">
+              <div className="video-overflow-container position-relative pop-up">
+                <div className="video-overlay">
+                  Voorbeeld
+                </div>
                 <video 
                   ref={videoRef}
                   className="game-video shadow" 
@@ -52,14 +72,14 @@ const MiniGameIntro = () => {
               </div>
 
               <div className="card-content-bottom p-5 text-center">
-                <p className="description-text">{game.description}</p>
+                <p className="description-text pop-up">{game.description}</p>
               </div>
             </div>
           </div>
 
           
           <div className="col-md-4 sidebar-custom d-flex flex-column p-5">
-            <div className="flex-grow-1">
+            <div className="controls flex-grow-1">
               <h2 className="text-white text-center mb-0">Besturing</h2>
               <div className="divider my-2"></div>
               
@@ -75,12 +95,18 @@ const MiniGameIntro = () => {
               </div>
             </div>
 
-            <div className="mb-4">
+            <div className={`buttons mb-4 ${buttonsVisible ? "visible" : ""}`}>
               <button 
                 className="btn-start w-100 py-3 shadow-lg"
                 onClick={() => navigate(`/game/${id}`)}
               >
                 Druk op de oranje knop om te starten!
+              </button>
+              <button 
+                className="btn-back w-90 py-3 shadow-lg"
+                onClick={() => navigate(`/games`)}
+              >
+                Terug naar minigames
               </button>
             </div>
           </div>

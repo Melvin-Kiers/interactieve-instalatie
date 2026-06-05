@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import tickSoundFile from "../assets/sounds/go.mp3"; 
+import goSoundFile from "../assets/sounds/button.mp3";
 
 export default function Countdown({
   start = 3,
@@ -10,8 +12,23 @@ export default function Countdown({
   const [count, setCount] = useState(start);
   const [active, setActive] = useState(true);
 
+  const playSound = (file) => {
+    const audio = new Audio(file);
+    audio.volume = 0.4;
+    audio.play().catch((err) => {
+      console.log("Audio kon niet direct afspelen via autoplay policy:", err);
+    });
+  };
+
   useEffect(() => {
     if (!active) return;
+
+
+    if (count > 0) {
+      playSound(tickSoundFile);
+    } else if (count === 0 && showGo) {
+      playSound(goSoundFile);
+    }
 
     if (count === 0) {
       const timeout = setTimeout(() => {

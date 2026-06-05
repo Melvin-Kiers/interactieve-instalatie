@@ -12,6 +12,7 @@
     font-style: normal;
 }
 
+
 .minigame-wrapper {
     height: 100vh;
     width: 100vw;
@@ -62,12 +63,10 @@
 
 .game-video {
     width: 100%;
-    height: 50vh; /* Je kunt dit iets verhogen als de video groter mag */
+    height: 50vh; 
     border-radius: 15px;
     border: 6px solid white;
-    /* VERANDER DIT: contain zorgt dat de hele video in het kader past */
     object-fit: contain; 
-    /* Voeg dit toe voor een strakke achtergrond achter de video balken */
     background-color: #00354F; 
 }
 
@@ -79,6 +78,7 @@
 h2.text-white {
     font-family: 'GeneralSans-Bold', Arial, sans-serif;
     margin-top: 40px;
+    font-size: 50px;
 }
 
 .divider {
@@ -108,6 +108,24 @@ h2.text-white {
     margin: 0;
 }
 
+.buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.buttons {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.buttons.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 .btn-start {
     background-color: #ff6a48;
     color: white;
@@ -121,6 +139,20 @@ h2.text-white {
 .btn-start:hover {
     background-color: #e55a3d;
     transform: scale(1.02);
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  background: rgba(206, 57, 57);
+  border-radius: 12px;
+  padding: 20px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+  text-align: center;
+  justify-content: center;
 }
 
 .countdown-overlay {
@@ -140,4 +172,79 @@ h2.text-white {
   font-weight: bold;
   color: white;
   text-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: 2px;
+
+    z-index: 10;
+    pointer-events: none;
+
+    animation: blinkOverlay 20s infinite;
+    border-radius: 16px;
+}
+
+@keyframes blinkOverlay {
+    0% { opacity: 1; }
+    10% { opacity: 1; }
+    40% { opacity: 0; }
+    70% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.controls {
+    transform: scale(0.95);
+    opacity: 0;
+    animation: controlsPopIn 1000ms ease-out forwards;
+    animation-delay: 3s
+}
+
+@keyframes controlsPopIn {
+    0% {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.pop-up {
+    transform: scale(0.95);
+    opacity: 0;
+    animation: PopIn 1000ms ease-out forwards;
+}
+
+@keyframes PopIn {
+    0% {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }

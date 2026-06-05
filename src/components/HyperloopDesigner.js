@@ -1170,7 +1170,7 @@ const S = {
     transition: "transform 0.2s, box-shadow 0.2s",
   },
   rightPanel: {
-    width: 300,
+    width: 400,
     minWidth: 200,
     background: "rgba(255,255,255,0.03)",
     borderLeft: "1px solid rgba(255,255,255,0.07)",
@@ -1180,14 +1180,14 @@ const S = {
     gap: 24,
   },
   colorGroupLabel: {
-    fontSize: 13,
+    fontSize: 18,
     color: "rgba(255,255,255,0.55)",
     marginBottom: 14,
     fontWeight: 500,
   },
   colorGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
+    gridTemplateColumns: "repeat(4, 1fr)",
     gap: 10,
   },
   colorDot: (color, selected) => ({
@@ -1284,7 +1284,7 @@ const PARTS = [
 
 const svgToDataUrl = (svg) => `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
 const PART_COLORS = ["#FF6B35", "#3A1509", "#A4E1FF"];
-const BRUSH_COLORS = ["#000000", "#FF0000", "#00FF00", "#0000FF", "#97067c", "#d89f00"];
+const BRUSH_COLORS = ["#FF0000", "#de4a14", "#ffbc04",  "#00FF00", "#0a3f0a", "#A4E1FF", "#014da9", "#001c3f", "#ff00f7", "#640553",  "#ffffff", "#000000"];
 
 export default function HyperloopDesigner({ username = "Melvin", onReset }) {
   const navigate = useNavigate();
@@ -1292,6 +1292,7 @@ export default function HyperloopDesigner({ username = "Melvin", onReset }) {
   const [partColor, setPartColor] = useState("#FF6B35");
   const [drawColor, setDrawColor] = useState("#000000");
   const [tool, setTool] = useState("brush");
+  const [brushSize, setBrushSize] = useState(4);
   const [submitted, setSubmitted] = useState(false);
   const [drawingData, setDrawingData] = useState(null);
 
@@ -1328,8 +1329,76 @@ export default function HyperloopDesigner({ username = "Melvin", onReset }) {
     redoRef.current = [];
   };
 
+const drawShape = (x, y) => {
+    const ctx = drawRef.current.getContext("2d");
+    ctx.fillStyle = drawColor;
+    ctx.globalCompositeOperation = "source-over";
+    const size = brushSize * 6;
+    
+    if (tool === "circle") {
+      ctx.beginPath();
+      ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (tool === "rect") {
+      ctx.fillRect(x - size / 2, y - size / 2, size, size);
+    } else if (tool === "triangle") {
+      ctx.beginPath();
+      ctx.moveTo(x, y - size / 2);
+      ctx.lineTo(x + size / 2, y + size / 2);
+      ctx.lineTo(x - size / 2, y + size / 2);
+      ctx.closePath();
+      ctx.fill();
+    } else if (tool === "heart") {
+      ctx.beginPath();
+      const topY = y - size / 4;
+      ctx.moveTo(x, topY + size / 4);
+      ctx.bezierCurveTo(x - size / 2, topY - size / 2, x - size, topY, x, y + size / 2);
+      ctx.bezierCurveTo(x + size, topY, x + size / 2, topY - size / 2, x, topY + size / 4);
+      ctx.closePath();
+      ctx.fill();
+    } else if (tool === "star") {
+      ctx.beginPath();
+      const spikes = 5;
+      const outerRadius = size / 2;
+      const innerRadius = size / 4;
+      let rot = (Math.PI / 2) * 3;
+      let cx = x;
+      let cy = y;
+      let step = Math.PI / spikes;
+
+      ctx.moveTo(cx, cy - outerRadius);
+      for (let i = 0; i < spikes; i++) {
+        cx = x + Math.cos(rot) * outerRadius;
+        cy = y + Math.sin(rot) * outerRadius;
+        ctx.lineTo(cx, cy);
+        rot += step;
+
+        cx = x + Math.cos(rot) * innerRadius;
+        cy = y + Math.sin(rot) * innerRadius;
+        ctx.lineTo(cx, cy);
+        rot += step;
+      }
+      ctx.lineTo(x, y - outerRadius);
+      ctx.closePath();
+      ctx.fill();
+    } else if (tool === "cross") {
+      const thickness = size / 3;
+      ctx.beginPath();
+      ctx.fillRect(x - size / 2, y - thickness / 2, size, thickness);
+      ctx.fillRect(x - thickness / 2, y - size / 2, thickness, size);
+    }
+  };
+
   const startDraw = (e) => {
     saveHistory();
+    const canvas = drawRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (W / rect.width);
+    const y = (e.clientY - rect.top) * (H / rect.height);
+    if (["circle", "rect", "triangle", "heart", "star", "cross"].includes(tool)) {
+      drawShape(x, y);
+      return;
+    }
     isDrawing.current = true;
     draw(e);
   };
@@ -1360,7 +1429,7 @@ export default function HyperloopDesigner({ username = "Melvin", onReset }) {
     } else {
       ctx.globalCompositeOperation = "source-over";
       ctx.strokeStyle = drawColor;
-      ctx.lineWidth = 4;
+      ctx.lineWidth = brushSize;
     }
 
     ctx.beginPath();
@@ -1418,50 +1487,62 @@ useEffect(() => {
 }, [submitted, onReset, navigate]);
 
   if (submitted && drawingData) {
-    return (
-      <div
-        style={{
-          ...S.root,
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}
-      >
-        <div style={{width: "80%", padding: 40 }}>
+  return (
+    <div
+      style={{
+        ...S.root,
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflowX: "hidden" // Voorkomt een scrollbalk tijdens het inschuiven
+      }}
+    >
+      {/* CSS Animatie definitie */}
+      <style>{`
+        @keyframes slideInFromLeft {
+          0% {
+            transform: translateX(-150%);
+            opacity: 0;
+          }
+          100% {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+      `}</style>
+
+      <div style={{ width: "80%", padding: 40 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 40
+          }}
+        >
+          {/* IMAGE */}
           <div
             style={{
+              flex: 1.2,
+              padding: 20,
               display: "flex",
-              alignItems: "center",
-              gap: 40
+              justifyContent: "center",
+              alignItems: "center"
             }}
           >
-
-            {/* IMAGE */}
-            <div
+            <img
+              src={drawingData}
+              alt="Hyperloop ontwerp"
               style={{
-                flex: 1.2,
-                background: "rgba(255,255,255,0.03)",
-                borderRadius: 20,
-                padding: 20,
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
+                width: "100%",
+                maxHeight: 320,
+                objectFit: "contain",
+                borderRadius: 12,
+                // Hier voegen we de animatie toe:
+                animation: "slideInFromLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards"
               }}
-            >
-              <img
-                src={drawingData}
-                alt="Hyperloop ontwerp"
-                style={{
-                  width: "100%",
-                  maxHeight: 320,
-                  objectFit: "contain",
-                  borderRadius: 12
-                }}
-              />
-            </div>
+            />
+          </div>
 
             {/* TEXT */}
             <div
@@ -1512,7 +1593,7 @@ useEffect(() => {
                 }}
               >
 
-                <button
+                {/* <button
                   onClick={onReset}
                   style={{
                     padding: "12px 20px",
@@ -1524,20 +1605,21 @@ useEffect(() => {
                   }}
                 >
                   Begin opnieuw
-                </button>
+                </button> */}
 
                 <button
                   onClick={() => navigate("/games")}
                   style={{
                     padding: "12px 20px",
-                    borderRadius: 999,
+                    borderRadius: 16,
                     border: "none",
                     background: "#FF6B35",
                     color: "#fff",
-                    cursor: "pointer"
+                    cursor: "pointer",
+                    fontSize: "20px",
                   }}
                 >
-                Ga naar de Minigames
+                Druk op de oranje knop om door te gaan naar de minigames
                 </button>
 
                 {/* <button
@@ -1580,8 +1662,13 @@ useEffect(() => {
           </svg>
           HYPERLOOP
         </div>
-        <div style={S.modeBadge}>
-          <div style={S.dot} /> Tekenmodus
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {/* <div style={S.modeBadge}>
+            <div style={S.dot} /> Tekenmodus
+          </div> */}
+          <button style={S.submitBtn} onClick={handleSubmit}>
+            Doorgaan
+          </button>
         </div>
       </div>
 
@@ -1612,21 +1699,59 @@ useEffect(() => {
             <canvas ref={drawRef} width={W} height={H} onMouseDown={startDraw} onMouseUp={stopDraw} onMouseMove={draw} onMouseLeave={stopDraw} style={{ position: "absolute", top: 0, left: 0, zIndex: 2, width: "100%", height: "100%", cursor: tool === "eraser" ? "cell" : "crosshair", background: "transparent" }} />
           </div>
 
-          <div style={S.toolbar}>
-            <button style={S.toolBtn(tool === "brush")} onClick={() => setTool("brush")}>✏️ Pen</button>
-            <button style={S.toolBtn(tool === "eraser")} onClick={() => setTool("eraser")}>🧽 Wissen</button>
-            <button style={S.deleteBtn} onClick={clearAll}>🗑️ Alles wissen</button>
-          </div>
-          <div style={S.submitRow}>
-            <button style={S.submitBtn} onClick={handleSubmit}>
-              Druk op de oranje knop om door te gaan
+          <div style={{ display: "flex", gap: 10, marginTop: 18, alignSelf: "center" }}>
+            {[
+              { id: "brush",  emoji: "✏️", label: "Pen" },
+              { id: "eraser", emoji: "🧽", label: "Gum" },
+            ].map(({ id, emoji, label }) => {
+              const active = tool === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => setTool(id)}
+                  style={{
+                    display: "flex", flexDirection: "column", alignItems: "center",
+                    gap: 6, padding: "14px 24px", borderRadius: 14, cursor: "pointer",
+                    minWidth: 80, transition: "all 0.15s", fontSize: 22,
+                    border: `2px solid ${active ? "#FF6B35" : "rgba(255,255,255,0.15)"}`,
+                    background: active ? "rgba(255,107,53,0.2)" : "rgba(255,255,255,0.06)",
+                    color: active ? "#FF6B35" : "rgba(255,255,255,0.6)",
+                    fontWeight: active ? 700 : 400,
+                  }}
+                >
+                  <span style={{ fontSize: 22 }}>{emoji}</span>
+                  {label}
+                  <span style={{
+                    display: "block", width: 6, height: 6, borderRadius: "50%",
+                    background: active ? "#FF6B35" : "transparent", marginTop: 2,
+                  }} />
+                </button>
+              );
+            })}
+
+            <div style={{ width: 1, background: "rgba(255,255,255,0.1)", margin: "4px" }} />
+
+            <button
+              onClick={clearAll}
+              style={{
+                display: "flex", flexDirection: "column", alignItems: "center",
+                gap: 6, padding: "14px 24px", borderRadius: 14, cursor: "pointer",
+                minWidth: 80, fontSize: 22,
+                border: "2px solid rgba(206,57,57,0.4)",
+                background: "rgba(206,57,57,0.1)",
+                color: "#ce3939",
+              }}
+            >
+              <span style={{ fontSize: 22 }}>🗑️</span>
+              Alles wissen
+              <span style={{ display: "block", width: 6, height: 6, borderRadius: "50%", background: "transparent", marginTop: 2 }} />
             </button>
           </div>
         </div>
 
         <div style={S.rightPanel}>
           <div>
-            <div style={S.colorGroupLabel}>Onderdeel kleur</div>
+            <div style={S.colorGroupLabel}>🚄 Hyperloop kleur</div>
             <div style={S.colorGrid}>
               {PART_COLORS.map(c => <div key={c} style={S.colorDot(c, partColor === c)} onClick={() => setPartColor(c)} />)}
               <label style={S.rainbowDot(!PART_COLORS.includes(partColor))}>
@@ -1636,11 +1761,64 @@ useEffect(() => {
             </div>
           </div>
           <div>
-            <div style={S.colorGroupLabel}>Penseel kleur</div>
+          <div style={S.colorGroupLabel}>✏️ Pendikte</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <input
+                type="range"
+                min="1"
+                max="30"
+                value={brushSize}
+                onChange={e => setBrushSize(Number(e.target.value))}
+                style={{ flex: 1, accentColor: "#FF6B35" }}
+              />
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", minWidth: 32 }}>
+                {brushSize}px
+              </span>
+            </div>
+          </div>
+          <div>
+            <div style={S.colorGroupLabel}><span>✏️ </span>Kleuren om te tekenen</div>
             <div style={S.colorGrid}>
               {BRUSH_COLORS.map(c => <div key={c} style={S.colorDot(c, drawColor === c)} onClick={() => setDrawColor(c)} />)}
             </div>
           </div>
+          <div>
+          <div style={S.colorGroupLabel}>Vormen</div>
+            <div style={{ display: "flex", gap: 10 }}>
+              {[
+                { id: "circle",   label: "⬤" },
+                { id: "rect",     label: "■" },
+                { id: "triangle", label: "▲" },
+                { id: "heart",    label: "♥" },
+                { id: "star",     label: "★" },
+                { id: "cross",    label: "✚" },
+              ].map(({ id, label }) => (
+                <button
+                  key={id}
+                  onClick={() => setTool(tool === id ? "brush" : id)}
+                  style={{
+                    flex: 1,
+                    padding: "10px 0",
+                    borderRadius: 12,
+                    border: `1.5px solid ${tool === id ? "#FF6B35" : "rgba(255,255,255,0.12)"}`,
+                    background: tool === id ? "rgba(255,107,53,0.18)" : "rgba(255,255,255,0.05)",
+                    color: tool === id ? "#FF6B35" : "rgba(255,255,255,0.7)",
+                    fontSize: 20,
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <button
+            style={{ ...S.submitBtn, marginTop: "auto", fontSize: "18px" }}
+            onClick={handleSubmit}
+          >
+            Druk op de oranje <br/>knop om door te gaan
+          </button>
         </div>
       </div>
     </div>

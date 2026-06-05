@@ -14,7 +14,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("/src/assets/svg/MapofEU.svg");
+  /* background-image: url("/src/assets/svg/MapofEU.svg"); */
   background-size: cover;
   background-position: center;
   opacity: 0.05;
@@ -359,6 +359,18 @@ canvas {
   font-size: 14px;
 }
 
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.minigame-title {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  font-family: 'GeneralSans-Bold', Arial, sans-serif;
+}
+
 .game-wrapper2 {
   position: relative;
   width: 100vw;
@@ -645,7 +657,8 @@ canvas {
 
 .welcome-grid h2 {
   color: #ffd54a;
-  font-size: 1.4rem;
+  font-size: 2rem;
+  font-family: "safiro-medium";
 }
 
 .welcome-grid {
@@ -805,6 +818,7 @@ h1 {
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: 20px;
+  font-family: "GeneralSans-Bold";
 }
 
 h1 span {
@@ -814,13 +828,14 @@ h1 span {
 .btn-orange {
   background-color: #f6653a;
   color: white;
-  font-size: 18px;
+  font-size: 24px;
+  font-family: 'safiro-medium';
+  padding: 16px;
+  border-radius: 16px;
 }
 
 .btn-orange:hover {
   background-color: #cd5530;
-  color: white;
-  font-size: 18px;
 }
 
 
@@ -902,4 +917,50 @@ h1 span {
 
 .game-card strong {
   font-size: 20px;
+}
+
+.welcome-grid span.logo{
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.intro-modal {
+  background: #0E0F15;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.intro-modal button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #F6653A;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.fade-in-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0s ease-in-out, visibility 1s ease-in-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
 }
