@@ -281,14 +281,14 @@ export default function GameHub({
                   <h2>{game.name}</h2>
 
                   {isPlayed ? (
-                    <p>Je hebt deze Minigame voltooid</p>
+                    <p>Je hebt deze Minigame voltooid!</p>
                   ) : (
                     <p>
                       Druk op de{" "}
                       <strong style={{ color: getColor(game.color) }}>
                         {game.color}
                       </strong>{" "}
-                      knop om te starten
+                      knop om {game.minigame} te starten
                     </p>
                   )}
                 </div>

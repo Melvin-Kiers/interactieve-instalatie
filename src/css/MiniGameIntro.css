@@ -103,9 +103,10 @@ h2.text-white {
 
 .description-text {
     color: #444;
-    font-size: 22px;
+    font-size: 24px;
     line-height: 1.6;
     margin: 0;
+    font-family: 'safiro-medium';
 }
 
 .buttons {
@@ -206,7 +207,7 @@ h2.text-white {
     transform: scale(0.95);
     opacity: 0;
     animation: controlsPopIn 1000ms ease-out forwards;
-    animation-delay: 3s
+    animation-delay: 5s
 }
 
 @keyframes controlsPopIn {

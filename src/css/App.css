@@ -288,6 +288,12 @@ canvas {
   flex-wrap: wrap;
 }
 
+.game-card h2 {
+  font-size: 32px;
+  font-family: 'GeneralSans-Bold';
+  color:#001b2e;
+}
+
 .game-card {
   max-width: 1200px;
   height: 140px;
@@ -301,6 +307,25 @@ canvas {
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 16px;
+  animation: bigger 4s infinite;
+}
+
+@keyframes bigger {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  90% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .game-card:hover {
@@ -313,6 +338,7 @@ canvas {
   background-color: #9ca3af;
   cursor: not-allowed;
   opacity: 0.6;
+  animation: bigger none;
 }
 
 .game-card.disabled:hover {
@@ -730,13 +756,22 @@ canvas {
   color: white;
 }
 
+.compliment {
+  font-size: 48px;
+  font-family: 'GeneralSans-Bold';
+}
+
+.minigame1-result .points {
+  font-size: 40px;
+}
+
 .minigame1-result {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   padding: 20px 30px;
   border-radius: 12px;
   color: white;
@@ -776,10 +811,14 @@ canvas {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   padding: 20px 30px;
   border-radius: 12px;
   color: white;
+}
+
+.minigame3-result .points {
+  font-size: 40px;
 }
 
 .start {
@@ -916,7 +955,8 @@ h1 span {
 }
 
 .game-card strong {
-  font-size: 20px;
+  font-size: 22px;
+  text-decoration: underline;
 }
 
 .welcome-grid span.logo{

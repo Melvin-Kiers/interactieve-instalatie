@@ -3,7 +3,7 @@ import tickSoundFile from "../assets/sounds/go.mp3";
 import goSoundFile from "../assets/sounds/button.mp3";
 
 export default function Countdown({
-  start = 3,
+  start = 5,
   onComplete = () => {},
   showGo = true,
   overlay = true,

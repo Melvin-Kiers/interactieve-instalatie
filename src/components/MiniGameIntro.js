@@ -40,7 +40,7 @@ const MiniGameIntro = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setButtonsVisible(true);
-    }, 8500);
+    }, 9000);
 
     return () => clearTimeout(timer);
   }, []);

@@ -72,7 +72,7 @@
   backdrop-filter: blur(6px);
   z-index: 1000;
   animation: moveUp 2s ease-in-out forwards;
-  animation-delay: 2s;
+  animation-delay: 3s;
   z-index: 10000;
 }
 
