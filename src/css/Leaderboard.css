@@ -239,3 +239,46 @@ span.logo{
   width: 80%;
   margin: 0 auto;
 }
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-card {
+  background: #0E0F15;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 30px;
+  border-radius: 12px;
+  min-width: 280px;
+  text-align: center;
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.popup-card p {
+  margin-bottom: 32px;
+}
+
+.popup-card strong.name {
+  color:#f6653a;
+}
+
+.popup-card strong.position, .popup-card strong.score {
+  text-decoration: underline;
+  color:#f6653a;
+}
+
+.popup-card h2 {
+  font-family: 'GeneralSans-Bold';
+  font-weight: 700;
+  line-height: 1.2;
+  font-size: 2.5rem;
+  color: #FFF;
+  margin-bottom: 24px;
+}

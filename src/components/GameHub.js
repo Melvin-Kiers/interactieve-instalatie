@@ -189,14 +189,22 @@ export default function GameHub({
           break;
         case "ArrowRight":
           if (allGamesPlayed) {
+            localStorage.setItem(
+              "myPlayer",
+              JSON.stringify({
+                name: username,
+                score: score,
+              })
+            );
+
             saveToLeaderboard();
             navigate("/leaderboard");
           }
-          break;
-        default:
-          break;
-      }
-    };
+        break;
+              default:
+                break;
+            }
+          };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -217,7 +225,7 @@ export default function GameHub({
       {showIntro && (
         <div className="intro-overlay">
           <div className="intro-modal">
-            <h1>Hallo, {username}</h1>
+            <h1>Hallo, <span className="welcome-name">{username}</span></h1>
             <p>Maak je klaar voor de korte introductie!</p>
 
             <button onClick={startIntro}>Klik op een knop om te starten</button>
@@ -302,6 +310,14 @@ export default function GameHub({
             className="col-8 leaderboard-overlay btn btn-orange"
             style={{ fontSize: "2.5rem" }}
             onClick={() => {
+              localStorage.setItem(
+                "myPlayer",
+                JSON.stringify({
+                  name: username,
+                  score: score,
+                })
+              );
+
               saveToLeaderboard();
               navigate("/leaderboard");
             }}

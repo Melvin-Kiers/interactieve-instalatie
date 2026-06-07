@@ -1,25 +1,49 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import icon from "../assets/icons/star.png";
 import rankIcon from "../assets/icons/trophy.png";
+import buttonSound from "../assets/sounds/endVO.mp3";
 
 export default function Leaderboard({ onReset }) {
   const leaderboardData = JSON.parse(localStorage.getItem("globalLeaderboard")) || [];
   const sortedPlayers = [...leaderboardData].sort((a, b) => b.score - a.score);
 
-  const handleRestart = () => {
-    if (onReset) onReset();
-    window.location.href = "/";
-  };
+  const [showPopup, setShowPopup] = useState(true);
+
+  const myPlayer = JSON.parse(localStorage.getItem("myPlayer"));
+
+  const myPosition = myPlayer
+    ? sortedPlayers.findIndex(
+        (p) =>
+          p.name === myPlayer.name &&
+          p.score === myPlayer.score
+      ) + 1
+    : null;
+
+    const handleRestart = () => {
+      if (onReset) onReset();
+      window.location.href = "/";
+    };
 
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.code === "ArrowRight") handleRestart();
+      if (e.code !== "ArrowRight") return;
+
+      if (showPopup) {
+        // 1. popup sluiten
+        setShowPopup(false);
+
+        const audio = new Audio(buttonSound);
+        audio.play().catch(() => {});
+      } else {
+        // 2. terug naar home
+        handleRestart();
+      }
     };
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);
+  }, [showPopup]);
 
   const topThree = sortedPlayers.slice(0, 3);
 
@@ -31,6 +55,30 @@ export default function Leaderboard({ onReset }) {
 
   return (
     <div className="lb-page-wrapper">
+      {showPopup && myPosition > 0 && (
+        <div className="popup-overlay">
+          <div className="popup-card">
+            <h2>Dit is hoe jij gescoord hebt, <strong className="name">{myPlayer.name}</strong>!</h2>
+
+            <p>
+              Je bent geëindigd op plek <strong className="position">{myPosition}</strong> met{" "}
+              <strong className="score">{myPlayer.score}</strong> punten! 
+            </p>
+
+            <button
+              className="btn-orange"
+              onClick={() => {
+                setShowPopup(false);
+
+                const audio = new Audio("/sounds/thanks.mp3");
+                audio.play().catch(() => {});
+              }}
+            >
+              Druk op de oranje knop om door te gaan
+            </button>
+          </div>
+        </div>
+      )}
       <div className="container py-5">
         <div className="col-12">
           <div className="lb-title">
