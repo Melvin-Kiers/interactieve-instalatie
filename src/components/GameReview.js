@@ -1,4 +1,5 @@
 import "../css/GameReview.css";
+import Speedometer from "../components/Speedometer.js";
 
 export default function GameReview() {
   const username = localStorage.getItem("username");
@@ -17,71 +18,139 @@ export default function GameReview() {
   const quizScore = totalScore - gameScore;
   const correctQuizzes = quizScore / 50;
 
-  return (
-    <div className="lb-page-wrapper">
-      <div className="container review-wrap">
-        <h2 className="review-title">Missie overzicht</h2>
+  const initials = username ? username.charAt(0).toUpperCase() : "?";
 
-        <div className="review-header">
-          {hyperloopImage && (
-            <img src={hyperloopImage} alt="Hyperloop" className="hyperloop-img" />
+  const getScore10 = (score) => {
+    if (score >= 1000) return 10;
+    if (score >= 900) return 9;
+    if (score >= 800) return 8;
+    if (score >= 700) return 7;
+    if (score >= 600) return 6;
+    if (score >= 500) return 5;
+    if (score >= 400) return 4;
+    if (score >= 300) return 3;
+    if (score >= 200) return 2;
+    return 1;
+  };
+
+const score10 = getScore10(totalScore);
+
+  return (
+    <div className="review-wrap">
+      <div className="container py-2">
+        <h1 className="title-review">Bekijk hier al je scores, <span className="orange">{username}</span>!</h1>
+
+        <h5>
+              Klik{" "}
+              <span
+                onClick={() => window.open("/game-review", "_blank")}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  color: "#F6653A"
+                }}
+              >
+                hier
+              </span>{" "}
+              om jouw Hyperloop met scores uit te printen!
+            </h5>
+
+        <div className="hero">
+          {hyperloopImage ? (
+            <img src={hyperloopImage} alt="Hyperloop" className="hero-img" />
+          ) : (
+            <div className="hero-img hero-img--empty">
+              <i className="ti ti-train" aria-hidden="true"></i>
+            </div>
           )}
-          <div>
-            <p className="player-name">{username}</p>
-            <p className="player-sub">Hyperloop piloot</p>
-            <div className="score-pill">
-              <span className="score-num">{totalScore}</span>
-              <span className="score-label">totaalscore</span>
+
+          <div className="hero-info">
+            <div className="pilot-row">
+              <div className="avatar">{initials}</div>
+              <div>
+                <p className="pilot-name">{username}</p>
+                <p className="pilot-sub">Hyperloop piloot</p>
+              </div>
+            </div>
+
+            <div className="stat-grid">
+              <div className="stat">
+                <div className="stat-val orange">{totalScore}<span className="max-number"> / 1000</span></div>
+                <div className="stat-lbl">Totaalscore</div>
+              </div>
+              <div className="stat">
+                <div className="stat-val">{playedGames.length} / 3</div>
+                <div className="stat-lbl">Minigames voltooid</div>
+              </div>
+              <div className="stat">
+                <div className="stat-val">{correctQuizzes} / 3</div>
+                <div className="stat-lbl">Quizvragen goed</div>
+              </div>
+              <div className="stat">
+                <div className="stat-val">+{quizScore}</div>
+                <div className="stat-lbl">Quizbonus</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <p className="section-label">Minigames</p>
-        <div className="games-grid">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", width:"100%" }}>
+          <Speedometer score={totalScore} max={1000} label="Totaal punten" />
+          <Speedometer score={score10} max={10} label="Eindbeoordeling" />
+        </div>
+
+        <hr className="review-divider" />
+
+        <p className="sec-label">Minigames</p>
+        <div className="games-list">
           {playedGames.map((gameId) => {
             const result = gameResults.find((g) => g.id === gameId);
             return (
-              <div key={gameId} className="game-card">
-                <p className="game-num">Minigame {gameId}</p>
-                <p className="game-name">{gameNames[gameId]}</p>
-                <div className="game-score-row">
-                  <span className="game-score">{result?.score ?? 0} pts</span>
-                  <span className="status-badge">✓ Voltooid</span>
-                </div>
+              <div key={gameId} className="gcard">
+                <span className="gcard-num">Minigame {gameId}:</span>
+                <span className="gcard-name orange">{gameNames[gameId]}</span>
+                <span className="gcard-score">{result?.score ?? 0} punten</span>
+                <span className="done-badge">
+                  ✓ Voltooid
+                </span>
               </div>
             );
           })}
         </div>
 
-        <hr className="review-divider" />
-
-        <p className="section-label">Quizvragen</p>
-        <div className="game-card" style={{ marginBottom: "1.5rem" }}>
-          <div className="game-score-row">
-            <div>
-              <p className="game-num">Bonusvragen</p>
-              <p className="game-name">{correctQuizzes} van de 3 goed</p>
-            </div>
-            <span className="game-score">+{quizScore} pts</span>
+        <p className="sec-label">Quizvragen</p>
+        <div className="quiz-card">
+          <div className="quiz-top">
+            <span className="quiz-title">{correctQuizzes} van de 3 vragen goed</span>
+            <span className="quiz-pts">+{quizScore} punten</span>
           </div>
-          <div style={{ marginTop: 12, background: "rgba(255,255,255,0.05)", borderRadius: 8, overflow: "hidden", height: 6 }}>
-            <div style={{ width: `${(correctQuizzes / 3) * 100}%`, height: "100%", background: "#F6653A", borderRadius: 8, transition: "width 0.6s ease" }} />
+          <div className="dots">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className={`dot ${i <= correctQuizzes ? "correct" : "wrong"}`}>
+                {i <= correctQuizzes ? "✓" : "✕"}
+              </div>
+            ))}
+          </div>
+          <div className="bar-bg">
+            <div className="bar-fill" style={{ width: `${(correctQuizzes / 3) * 100}%` }}></div>
           </div>
         </div>
 
         <hr className="review-divider" />
-        <div className="total-row" style={{ marginBottom: 8 }}>
-          <span className="total-label">Minigames</span>
-          <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 16 }}>{gameScore} pts</span>
-        </div>
-        <div className="total-row" style={{ marginBottom: 8 }}>
-          <span className="total-label">Quizbonus</span>
-          <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 16 }}>+{quizScore} pts</span>
-        </div>
-        <hr className="review-divider" />
-        <div className="total-row">
-          <span className="total-label">Eindtotaal</span>
-          <span className="total-score">{totalScore} pts</span>
+        <div className="total-rows">
+          <div className="tr">
+            <span className="tr-lbl">Minigames</span>
+            <span className="tr-val">{gameScore} punten</span>
+          </div>
+          <div className="tr">
+            <span className="tr-lbl">Quizbonus</span>
+            <span className="tr-val">+{quizScore} punten</span>
+          </div>
+          <hr className="review-divider" />
+          <div className="tr final">
+            <span className="tr-lbl">Totaal</span>
+            <span className="tr-val">{totalScore} punten</span>
+          </div>
         </div>
       </div>
     </div>
