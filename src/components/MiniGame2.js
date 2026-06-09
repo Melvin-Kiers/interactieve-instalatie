@@ -6,7 +6,7 @@ import uitlegVideoMiniGame2 from "..//assets/videos/UitlegVideoMiniGame2NEW.mp4"
 import backgroundMusic from "../assets/sounds/minigame2.mp3";
 import "../css/Gamehud.css";
 
-export default function MiniGame2({ updateScore, markGameAsPlayed }) {
+export default function MiniGame2({ updateScore, markGameAsPlayed, saveGameResult }) {
   const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
@@ -33,6 +33,14 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   const count = 60;
   const maxRounds = 25;
 
+  const [videoFinished, setVideoFinished] = useState(false);
+
+  useEffect(() => {
+    if (gameOver) {
+      setVideoFinished(false);
+    }
+  }, [gameOver]);
+  
   useEffect(() => {
     const storedImage = localStorage.getItem("hyperloopImage");
     if (storedImage) setImage(storedImage);
@@ -152,7 +160,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
     if (xHit && !hasScored) {
       if (isSameLane) {
         // Door de wave heen = punten krijgen
-        setScore((s) => s + 10);
+        setScore((s) => s + 15);
         setHasScored(true);
 
         setIsHit(true);
@@ -190,17 +198,23 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
   }, [gameOver]);
 
   useEffect(() => {
-  const handleEnter = (e) => {
-    if (e.code === "ArrowRight" && gameOver) {
-      updateScore(score);
-      markGameAsPlayed(2);
-      navigate("/games");
-    }
-  };
+    const handleEnter = (e) => {
+      if (e.code !== "ArrowRight") return;
 
-  window.addEventListener("keydown", handleEnter);
-  return () => window.removeEventListener("keydown", handleEnter);
-}, [gameOver, score]);
+      if (gameOver) {
+        if (!videoFinished) return;
+
+        updateScore(score);
+        saveGameResult(2, score);
+        markGameAsPlayed(2);
+        navigate("/games");
+      }
+    };
+
+    window.addEventListener("keydown", handleEnter);
+
+    return () => window.removeEventListener("keydown", handleEnter);
+  }, [gameOver, videoFinished, score, updateScore, markGameAsPlayed, navigate]);
 
 
   return (
@@ -332,28 +346,39 @@ export default function MiniGame2({ updateScore, markGameAsPlayed }) {
                 boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
                 backgroundColor: '#000' 
               }}>
-                <video 
-                  className="explainVideo-2" 
-                  src={uitlegVideoMiniGame2} 
-                  autoPlay 
-                  style={{ 
-                    width: '100%', 
+                <video
+                  className="explainVideo-2"
+                  src={uitlegVideoMiniGame2}
+                  autoPlay
+                  playsInline
+                  onEnded={() => setVideoFinished(true)}
+                  style={{
+                    width: '100%',
                     display: 'block'
-                  }} 
-                />    
+                  }}
+                /> 
               </div>
             </div>
             
             <button
               className="btn-orange mt-4"
-              style={{ width: '100%', padding: '12px' }}
+              style={{
+                width: '100%',
+                padding: '12px',
+                opacity: videoFinished ? 1 : 0.15
+              }}
+              disabled={!videoFinished}
               onClick={() => {
                 updateScore(score);
-                markGameAsPlayed(2); 
+                markGameAsPlayed(2);
+
+                saveGameResult(2, score);
                 navigate("/games");
               }}
             >
-              Druk op de oranje knop om terug te gaan naar je Hyperloop
+              {videoFinished
+                ? "Druk op de oranje knop om terug te gaan naar je Hyperloop"
+                : "Bekijk eerst de video"}
             </button>
           </div>
         </div>

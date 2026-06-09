@@ -6,7 +6,7 @@ import uitlegVideoMiniGame1 from "..//assets/videos/UitlegVideoMiniGame1NEW.mp4"
 import Countdown from "./Countdown"; // Vergeet de import niet!
 import "../css/Gamehud.css";
 
-export default function MiniGame1({ updateScore, markGameAsPlayed }) {
+export default function MiniGame1({ updateScore, markGameAsPlayed, saveGameResult }) {
   const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
@@ -15,6 +15,7 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
   
   // STANDAARD OP FALSE: Wachten op de countdown
   const [running, setRunning] = useState(false);
+  const [videoFinished, setVideoFinished] = useState(false);
   
   const [result, setResult] = useState(null);
   const [finalScore, setFinalScore] = useState(0);
@@ -27,6 +28,12 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
   const [target, setTarget] = useState({ start: 40, end: 60 });
 
   const baseSpeed = 0 + round * 1.25;
+
+  useEffect(() => {
+  if (gameOver) {
+    setVideoFinished(false);
+  }
+}, [gameOver]);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("hyperloopImage");
@@ -114,6 +121,8 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
       if (e.key !== "ArrowRight") return;
 
       if (gameOver) {
+        if (!videoFinished) return;
+
         handleFinalExit();
         return;
       }
@@ -125,10 +134,11 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
     };
 
     document.addEventListener("keydown", handleKeyDown, true);
+
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, [result, gameOver]);
+  }, [result, gameOver, videoFinished]);
 
   const finishRound = (stopPos) => {
     setHasScoredThisRound((alreadyScored) => {
@@ -136,12 +146,12 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
 
       let points = 0;
       if (stopPos >= target.start && stopPos <= target.end) {
-        points = 100;
+        points = 50;
       } else {
         const dist = Math.min(Math.abs(stopPos - target.start), Math.abs(stopPos - target.end));
-        if (dist < 5) points = 70;
-        else if (dist < 10) points = 40;
-        else points = 10;
+        if (dist < 5) points = 35;
+        else if (dist < 10) points = 15;
+        else points = 5;
       }
 
       setFinalScore((prev) => prev + points);
@@ -164,6 +174,9 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
   const handleFinalExit = () => {
     updateScore(finalScore);
     markGameAsPlayed(1);
+
+      saveGameResult(1, finalScore);
+
     navigate("/games");
   };
 
@@ -300,11 +313,35 @@ export default function MiniGame1({ updateScore, markGameAsPlayed }) {
                 width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#000',
                 boxShadow: '0 4px 15px rgba(0,0,0,0.3)', lineHeight: 0 
               }}>
-                <video className="explainVideo-2" src={uitlegVideoMiniGame1} autoPlay playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />    
+                <video
+                  className="explainVideo-2"
+                  src={uitlegVideoMiniGame1}
+                  autoPlay
+                  playsInline
+                  onEnded={() => setVideoFinished(true)}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    display: 'block'
+                  }}
+                />   
               </div>
             </div>
-            <button className="btn-orange btn-full mt-4" style={{ width: '100%', padding: '12px', fontWeight: 'bold' }} onClick={handleFinalExit}>
-              Druk op de oranje knop om terug te gaan naar je Hyperloop
+            <button
+              className="btn-orange btn-full mt-4"
+              disabled={!videoFinished}
+              style={{
+                width: '100%',
+                padding: '12px',
+                fontWeight: 'bold',
+                opacity: videoFinished ? 1 : 0.15,
+                cursor: videoFinished ? 'pointer' : 'not-allowed'
+              }}
+              onClick={handleFinalExit}
+            >
+              {videoFinished
+                ? "Druk op de oranje knop om terug te gaan naar je Hyperloop"
+                : "Bekijk eerst de video"}
             </button>
           </div>
         </div>

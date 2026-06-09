@@ -5,8 +5,9 @@ import backgroundMusic from "../assets/sounds/minigame3.mp3";
 import uitlegVideoMiniGame3 from "..//assets/videos/UitlegVideoMiniGame3NEW.mp4";
 import Countdown from "./Countdown";
 
-export default function MiniGame3({ updateScore, markGameAsPlayed }) {
+export default function MiniGame3({ updateScore, markGameAsPlayed, saveGameResult }) {
   const navigate = useNavigate();
+  const [videoFinished, setVideoFinished] = useState(false);
 
   const maxRounds = 5;
   const [round, setRound] = useState(1);
@@ -36,6 +37,12 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const drift = 0.12;
   const enginePower = 0.38;
   const damping = 0.9;
+
+  useEffect(() => {
+    if (gameOver) {
+      setVideoFinished(false);
+    }
+  }, [gameOver]);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("hyperloopImage");
@@ -146,15 +153,15 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
           let points = 0;
 
           if (currentCapsulePos >= currentZonePos && currentCapsulePos <= zoneEnd) {
-            points = 100;
+            points = 50;
           } else {
             const dist = Math.min(
               Math.abs(currentCapsulePos - currentZonePos),
               Math.abs(currentCapsulePos - zoneEnd)
             );
-            if (dist < 5) points = 70;
-            else if (dist < 10) points = 40;
-            else points = 10;
+            if (dist < 5) points = 35;
+            else if (dist < 10) points = 15;
+            else points = 5;
           }
 
           setFinalScore((prev) => prev + points);
@@ -182,6 +189,8 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
   const handleFinalExit = () => {
     updateScore(finalScore);
     markGameAsPlayed(3);
+
+    saveGameResult(3, finalScore);
     navigate("/games");
   };
 
@@ -208,26 +217,28 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
     }
   }, [gameOver]);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key !== "ArrowRight") return;
+useEffect(() => {
+  const handleKeyDown = (e) => {
+    if (e.key !== "ArrowRight") return;
 
-      if (gameOver) {
-        handleFinalExit();
-        return;
-      }
+    if (gameOver) {
+      if (!videoFinished) return;
+      handleFinalExit();
+      return;
+    }
 
-      if (result) {
-        nextRound();
-        return;
-      }
-    };
+    if (result) {
+      nextRound();
+      return;
+    }
+  };
 
-    document.addEventListener("keydown", handleKeyDown, true);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown, true);
-    };
-  }, [result, gameOver]);
+  document.addEventListener("keydown", handleKeyDown, true);
+
+  return () => {
+    document.removeEventListener("keydown", handleKeyDown, true);
+  };
+}, [result, gameOver, videoFinished, handleFinalExit, nextRound]);
 
   return (
     <div className="minigame-container" style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
@@ -361,16 +372,36 @@ export default function MiniGame3({ updateScore, markGameAsPlayed }) {
                 width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#000',
                 boxShadow: '0 4px 15px rgba(0,0,0,0.3)', lineHeight: 0 
               }}>
-                <video className="explainVideo-2" src={uitlegVideoMiniGame3} autoPlay playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />    
+                <video
+                  className="explainVideo-2"
+                  src={uitlegVideoMiniGame3}
+                  autoPlay
+                  playsInline
+                  onEnded={() => setVideoFinished(true)}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    display: 'block'
+                  }}
+                />  
               </div>
             </div>
 
-            <button 
-              className="btn-orange btn-full mt-4" 
-              style={{ width: '100%', padding: '12px', fontWeight: 'bold' }} 
+            <button
+              className="btn-orange btn-full mt-4"
+              style={{
+                width: '100%',
+                padding: '12px',
+                fontWeight: 'bold',
+                opacity: videoFinished ? 1 : 0.15,
+                cursor: videoFinished ? 'pointer' : 'not-allowed'
+              }}
+              disabled={!videoFinished}
               onClick={handleFinalExit}
             >
-              Druk op de oranje knop om terug te gaan naar je Hyperloop
+              {videoFinished
+                ? "Druk op de oranje knop om terug te gaan naar je Hyperloop"
+                : "Bekijk eerst de video"}
             </button>
           </div>
         </div>

@@ -9,12 +9,76 @@ import welcomeVoice from "../assets/sounds/introVO.mp3";
 export default function GameHub({
   username,
   score,
+  setScore,
   playedGames,
   saveToLeaderboard,
 }) {
   const navigate = useNavigate();
   const audioRef = useRef(null);
   const videoRef = useRef(null);
+
+  const [quizResult, setQuizResult] = useState(null);
+// null | { correct: boolean, explanation: string }
+
+  const quizQuestions = {
+    1: {
+      question: "Moet een Hyperloop-pod precies op tijd remmen?",
+      correct: "Ja",
+      explanation: "Ja, want een te late remming kan instabiliteit en veiligheidsproblemen veroorzaken.",
+    },
+    2: {
+      question: "Gebruikt een Hyperloop magneten?",
+      correct: "Ja",
+      explanation: "Ja, magneten worden gebruikt voor levitatie en aandrijving."
+    },
+    3: {
+      question: "Is het belangrijk dat een pod goed gecentreerd blijft?",
+      correct: "Ja",
+      explanation: "Ja, centrering voorkomt wrijving en energieverlies in de buis."
+    },
+  };
+
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [currentQuiz, setCurrentQuiz] = useState(null);
+
+  useEffect(() => {
+    const lastGame = playedGames[playedGames.length - 1];
+
+    if (!lastGame) return;
+
+    const quizDone = localStorage.getItem(`quiz-${username}-${lastGame}`);
+
+    if (!quizDone) {
+      setCurrentQuiz(lastGame);
+      setShowQuiz(true);
+    }
+  }, [playedGames]);
+
+const handleQuizAnswer = (answer) => {
+  const question = quizQuestions[currentQuiz];
+  const isCorrect = answer === question.correct;
+
+  if (isCorrect) {
+    const newScore = score + 50;
+
+    setScore(newScore);
+    localStorage.setItem("score", newScore); // <- dit is de fix
+  }
+
+  setQuizResult({
+    correct: isCorrect,
+    explanation: question.explanation,
+  });
+
+  localStorage.setItem(`quiz-${username}-${currentQuiz}`, "true");
+
+  setShowQuiz(false);
+  setCurrentQuiz(null);
+};
+
+const closeQuizResult = () => {
+  setQuizResult(null);
+};
 
   const introKey = `gamehub-intro-${username}`;
 
@@ -127,26 +191,26 @@ export default function GameHub({
   const speed = score < 100 ? 100 : score;
   const [displaySpeed, setDisplaySpeed] = useState(100);
 
-  useEffect(() => {
-    let start = 100;
-    const end = speed;
+useEffect(() => {
+  const start = displaySpeed;
+  const end = speed;
 
-    const duration = 3000; // ms
-    const startTime = performance.now();
+  const duration = 1000;
+  const startTime = performance.now();
 
-    const animate = (time) => {
-      const progress = Math.min((time - startTime) / duration, 1);
+  const animate = (time) => {
+    const progress = Math.min((time - startTime) / duration, 1);
 
-      const value = Math.floor(start + (end - start) * progress);
-      setDisplaySpeed(value);
+    const value = Math.floor(start + (end - start) * progress);
+    setDisplaySpeed(value);
 
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  };
 
-    requestAnimationFrame(animate);
-  }, [speed]);
+  requestAnimationFrame(animate);
+}, [speed]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -174,6 +238,7 @@ export default function GameHub({
     const handleKeyDown = (e) => {
       // Blokkeer ook de toetsenbordbesturing tijdens de intro-periode!
       if (!isButtonsVisible) return;
+      if (showQuiz) return;
 
       const isPlayed = (id) => playedGames.includes(id);
 
@@ -188,6 +253,11 @@ export default function GameHub({
           if (!isPlayed(3)) navigate("/games/uitleg/3");
           break;
         case "ArrowRight":
+          if (quizResult) {
+            closeQuizResult();
+            return;
+          }
+
           if (allGamesPlayed) {
             localStorage.setItem(
               "myPlayer",
@@ -200,7 +270,7 @@ export default function GameHub({
             saveToLeaderboard();
             navigate("/leaderboard");
           }
-        break;
+          break;
               default:
                 break;
             }
@@ -208,7 +278,7 @@ export default function GameHub({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [navigate, playedGames, allGamesPlayed, saveToLeaderboard, isButtonsVisible]);
+  }, [navigate, playedGames, allGamesPlayed, saveToLeaderboard, isButtonsVisible, showQuiz, quizResult]);
 
   function getColor(name) {
     const colors = {
@@ -218,6 +288,25 @@ export default function GameHub({
     };
     return colors[name] ?? "inherit";
   }
+
+useEffect(() => {
+  const handleKey = (e) => {
+    if (!showQuiz || !currentQuiz) return;
+
+    if (e.code === "Space") {
+      e.preventDefault();
+      handleQuizAnswer("Ja");
+    }
+
+    if (e.code === "ArrowDown") {
+      e.preventDefault();
+      handleQuizAnswer("Nee");
+    }
+  };
+
+  window.addEventListener("keydown", handleKey);
+  return () => window.removeEventListener("keydown", handleKey);
+}, [showQuiz, currentQuiz, handleQuizAnswer]);
 
   return (
     <section className="game-hub">
@@ -229,6 +318,47 @@ export default function GameHub({
             <p>Maak je klaar voor de korte introductie!</p>
 
             <button onClick={startIntro}>Klik op een knop om te starten</button>
+          </div>
+        </div>
+      )}
+
+      {showQuiz && currentQuiz && (
+        <div className="intro-overlay">
+          <div className="intro-modal questions">
+            <div className="quiz-badge">
+            Hyperloop vraag
+            </div>
+            <h2>Weet jij het antwoord?</h2>
+            <p className="quiz-points">
+              Scoor <span>+50 punten</span> als je het goed hebt!
+            </p>
+            <div className="quiz-question-box">
+              {quizQuestions[currentQuiz].question}
+            </div>
+            <div className="quiz-btn-row">
+              <button className="quiz-btn yes" onClick={() => handleQuizAnswer("Ja")}>
+                ✓ Ja <p className="small_text">Druk op de blauwe knop</p>
+              </button>
+              <button className="quiz-btn no" onClick={() => handleQuizAnswer("Nee")}>
+                ✕ Nee <p className="small_text">Druk op de zwarte knop</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {quizResult && (
+        <div className="intro-overlay">
+          <div className="intro-modal">
+            <h2>
+              {quizResult.correct ? "Goed antwoord! +50 punten!" : "Fout antwoord"}
+            </h2>
+
+            <p>{quizResult.explanation}</p>
+
+            <button onClick={closeQuizResult}>
+              Druk op de oranje knop om door te gaan
+            </button>
           </div>
         </div>
       )}

@@ -704,7 +704,7 @@ canvas {
 
 .leaderboard-overlay {
   position: absolute;
-  height: 17.5vh;
+  height: 20vh;
   bottom: 17.5%;
   left: 50%;
   transform: translateX(-50%);
@@ -996,6 +996,19 @@ h1 span {
   color: #F6653A;
 }
 
+.intro-modal .orange {
+  color:#F6653A;
+  font-weight: bold;
+}
+
+.intro-modal.questions h3 {
+  font-size: 20px;
+}
+
+.intro-modal.questions button{
+  margin: 0 8px;
+}
+
 .fade-in-hidden {
   opacity: 0;
   visibility: hidden;
@@ -1008,4 +1021,109 @@ h1 span {
   visibility: visible;
   pointer-events: auto;
   transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+/* .intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+} */
+
+.intro-modal.questions {
+  background: #0E0F15;
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 36px 40px;
+  max-width: 50%;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.intro-modal.questions::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: #F6653A;
+  border-radius: 16px 16px 0 0;
+}
+
+.quiz-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(246, 101, 58, 0.12);
+  border: 0.5px solid rgba(246, 101, 58, 0.35);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 18px;
+  color: #F6653A;
+  margin-bottom: 20px;
+}
+
+.intro-modal.questions h2 {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+.quiz-points {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 24px;
+}
+
+.quiz-points span {
+  color: #F6653A;
+  font-weight: 500;
+}
+
+.quiz-question-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 32px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.55;
+  margin-bottom: 28px;
+}
+
+.quiz-btn-row {
+  display: flex;
+  gap: 10px;
+}
+
+.quiz-btn {
+  flex: 1;
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.quiz-btn.yes {
+  background: #003DAD;
+  color: #fff;
+}
+
+.quiz-btn.no {
+  background: #000;
+  color: #fff;
+}
+
+.small_text {
+  margin-top: 8px;
+  font-size: 16px;
+  margin-bottom: 2px;
 }

@@ -9,7 +9,7 @@ export default function Leaderboard({ onReset }) {
   const sortedPlayers = [...leaderboardData].sort((a, b) => b.score - a.score);
 
   const [showPopup, setShowPopup] = useState(true);
-
+  const navigate = useNavigate();
   const myPlayer = JSON.parse(localStorage.getItem("myPlayer"));
 
   const myPosition = myPlayer
@@ -83,7 +83,31 @@ export default function Leaderboard({ onReset }) {
         <div className="col-12">
           <div className="lb-title">
             <h1>Bekijk hier <span>jouw score</span> en die van anderen!</h1>
-            <h5>Klik <span>hier</span> om jouw Hyperloop uit te printen met je score, of deel hem <span>hier</span> met andere!</h5>
+            <h5>
+              Klik{" "}
+              <span
+                onClick={() => window.open("/game-review", "_blank")}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  color: "#F6653A"
+                }}
+              >
+                hier
+              </span>{" "}
+              om jouw Hyperloop uit te printen met je score, of deel hem{" "}
+              <span
+                onClick={() => window.open("/game-review", "_blank")}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  color: "#F6653A"
+                }}
+              >
+                hier
+              </span>{" "}
+              met anderen!
+            </h5>
           </div>
             
             {/* TOP 3 SECTIE */}

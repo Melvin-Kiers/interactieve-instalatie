@@ -1,0 +1,134 @@
+.review-wrap { padding: 2rem 0; }
+
+.review-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr;  /* ← 6/6 col verdeling */
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.hyperloop-img {
+  width: 100%;
+  height: 280px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 0.5px solid rgba(255,255,255,0.1);
+}
+
+.player-name {
+  font-size: 22px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 0 4px;
+}
+
+.player-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.45);
+  margin: 0 0 20px;
+}
+
+.score-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(246,101,58,0.1);
+  border: 0.5px solid rgba(246,101,58,0.3);
+  border-radius: 999px;
+  padding: 6px 16px;
+}
+
+.score-pill .score-num {
+  font-size: 20px;
+  font-weight: 500;
+  color: #F6653A;
+}
+
+.score-pill .score-label {
+  font-size: 13px;
+  color: rgba(246,101,58,0.8);
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.game-card {
+  background: #0E0F15;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0px; left: 0; right: 0;
+  height: 3px;
+  background: #F6653A;
+}
+
+.game-card .game-num {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  margin: 0 0 6px;
+}
+
+.game-card .game-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 0 12px;
+}
+
+.game-score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.game-score {
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  background: rgba(16,185,129,0.12);
+  color: #10b981;
+  border-radius: 6px;
+  padding: 3px 8px;
+}
+
+.review-divider {
+  border: none;
+  border-top: 0.5px solid rgba(255,255,255,0.1);
+  margin: 1.5rem 0;
+}
+
+.total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.total-label { font-size: 15px; color: rgba(255,255,255,0.45); }
+.total-score { font-size: 24px; font-weight: 500; color: #fff; }
