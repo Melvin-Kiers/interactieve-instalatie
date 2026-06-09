@@ -22,19 +22,19 @@ export default function GameHub({
 
   const quizQuestions = {
     1: {
-      question: "Moet een Hyperloop-pod precies op tijd remmen?",
+      question: "Is de ruimte tussen de buis en Hyperloop is gelijk aan de dikte van een muntje?",
       correct: "Ja",
-      explanation: "Ja, want een te late remming kan instabiliteit en veiligheidsproblemen veroorzaken.",
+      explanation: "Ja, de ruimte is gelijk aan de dikte van een muntje. Dat is minder dan 2 milimeter!",
     },
     2: {
-      question: "Gebruikt een Hyperloop magneten?",
+      question: "De Hyperloop gebruikt magneten om van baan te wisselen?",
       correct: "Ja",
-      explanation: "Ja, magneten worden gebruikt voor levitatie en aandrijving."
+      explanation: "Ja, magneten worden gebruikt om de Hyperloop van baan te laten wisselen."
     },
     3: {
-      question: "Is het belangrijk dat een pod goed gecentreerd blijft?",
+      question: "Klopt het dat de Hyperloop bijna net zo snel gaat als een vliegtuig?",
       correct: "Ja",
-      explanation: "Ja, centrering voorkomt wrijving en energieverlies in de buis."
+      explanation: "Ja, de Hyperloop gaat bijna net zo snel als een vliegtuig. Wel ruim 900km/u!"
     },
   };
 
@@ -97,7 +97,7 @@ const closeQuizResult = () => {
     {
       id: 2,
       minigame: "Minigame 2",
-      name: "Magneet Switch",
+      name: "Magneet Wisselen",
       route: "/games/uitleg/2",
       color: "zwarte",
     },

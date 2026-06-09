@@ -40,7 +40,7 @@ const MiniGameIntro = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setButtonsVisible(true);
-    }, 9000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -54,9 +54,12 @@ const MiniGameIntro = () => {
           <div className="col-md-8 d-flex flex-column align-items-center justify-content-center position-relative">            
             <div className="white-card shadow-lg d-flex flex-column align-items-center p-0">
               
-              <h1 className="display-4 fw-bold mb-4 main-title pop-up">{game.title}</h1>
+              <h1 className="display-4 fw-bold mb-4 main-title pop-up1">{game.title}</h1>
+              <div className="card-content-bottom mb-5 text-center pop-up1">
+                <p className="description-text">{game.description}</p>
+              </div>
               
-              <div className="video-overflow-container position-relative pop-up">
+              <div className="video-overflow-container position-relative videoPop-in">
                 <div className="video-overlay">
                   Voorbeeld
                 </div>
@@ -69,10 +72,6 @@ const MiniGameIntro = () => {
                 >
                   <source src={game.video} type="video/mp4" />
                 </video>
-              </div>
-
-              <div className="card-content-bottom p-5 text-center">
-                <p className="description-text pop-up">{game.description}</p>
               </div>
             </div>
           </div>

@@ -251,7 +251,7 @@ useEffect(() => {
 
       <div className="game-screen text-center mt-4">
         <div className="hud-root">
-          <div className="hud-title-center">Minigame 3: <br/> <span className="italic">Hyperloop Stabiel Houden</span></div>
+          <div className="hud-title-center">Minigame 3: <br/> <span className="italic">Centreer de Hyperloop</span></div>
 
           <div className="hud-panel hud-score">
             <div className="hud-label">Punten</div>

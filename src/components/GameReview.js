@@ -9,7 +9,7 @@ export default function GameReview() {
 
   const gameNames = {
     1: "Rem precies goed",
-    2: "Magneet Switch",
+    2: "Magneet Wisselen",
     3: "Centreer de Hyperloop",
   };
 

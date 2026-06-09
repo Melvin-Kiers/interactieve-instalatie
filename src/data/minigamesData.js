@@ -14,17 +14,17 @@ const minigamesData = [
     description: "Rem op tijd en stop in het groene vlak. Maar let op: elke ronde ga je sneller",
     video: uitleg1,
     controls: [
-      { icon: buttonBlue, label: "Door op de blauwe knop te drukken rem je!", size: "50px" }
+      { icon: buttonBlue, label: "Door op de blauwe knop te drukken rem je!", size: "40px" }
     ],
   },
   {
     id: 2,
-    title: "Magneet Switch",
+    title: "Magneet Wisselen",
     description: "Stuur je Hyperloop door de juiste baan en raak zoveel mogelijk cirkels. Let op, je gaat steeds sneller!",
     video: uitleg2,
     controls: [
-      { icon: buttonGreen, label: "Druk op de groene knop om omhoog te gaan!", size: "50px" },
-      { icon: buttonBlack, label: "Druk op de zwarte knop om omlaag te gaan!", size: "50px" }
+      { icon: buttonGreen, label: "Druk op de groene knop om omhoog te gaan!", size: "40px" },
+      { icon: buttonBlack, label: "Druk op de zwarte knop om omlaag te gaan!", size: "40px" }
     ]
   },
   {
