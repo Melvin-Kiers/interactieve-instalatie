@@ -134,7 +134,9 @@ h2.text-white {
     border-radius: 15px;
     font-size: 26px;
     font-weight: bold;
-    transition: transform 0.1s ease
+    transition: transform 0.1s ease;
+    font-family: 'safiro-medium';
+    font-weight: 500;
 }
 
 .btn-start:hover {
@@ -154,6 +156,8 @@ h2.text-white {
   transition: background 0.2s;
   text-align: center;
   justify-content: center;
+  font-family: 'safiro-medium';
+  font-weight: 500;
 }
 
 .countdown-overlay {

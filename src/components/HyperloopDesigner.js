@@ -928,6 +928,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import NameInput from "./NameInput";
 
 // ─── inline styles ──────────────────────────────────
 const S = {
@@ -971,6 +972,8 @@ const S = {
     cursor: "pointer",
     fontSize: 14,
     transition: "background 0.2s",
+    fontFamily: "safiro-medium",
+    fontWeight:"500",
   },
   modeBadge: {
     display: "flex",
@@ -1168,6 +1171,8 @@ const S = {
     fontSize: 15,
     cursor: "pointer",
     transition: "transform 0.2s, box-shadow 0.2s",
+    fontFamily: "safiro-medium",
+    fontWeight:"500",
   },
   rightPanel: {
     width: 400,
@@ -1556,8 +1561,8 @@ useEffect(() => {
                 boxShadow: "0 10px 40px rgba(0,0,0,0.4)"
               }}
             >
-              <h2 style={{ marginBottom: 10, fontSize: 26 }}>
-                Jouw <span style={{ color: "#ff6b2c" }}>Hyperloop</span>
+              <h2 style={{ marginBottom: 16, fontSize: 32 }}>
+                Dit is jouw Hyperloop, <span style={{ color: "#ff6b2c" }}>{username}</span>!
               </h2>
 
               <div

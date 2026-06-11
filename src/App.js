@@ -171,6 +171,7 @@ import MiniGameIntro from "./components/MiniGameIntro";
 import Leaderboard from "./components/Leaderboard";
 
 import "./css/App.css";
+import IdleTracker from "./components/IdleTracker";
 
 
 // 🔁 MiniGame Router
@@ -276,6 +277,8 @@ export default function App() {
 
   return (
     <Router>
+      <IdleTracker timeout={75000}/>
+
       <div className="background-map"></div>
 
       <Routes>

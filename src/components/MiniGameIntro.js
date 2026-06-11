@@ -101,7 +101,7 @@ const MiniGameIntro = () => {
               >
                 Druk op de oranje knop om te starten!
               </button>
-              <button 
+              <button className="minigames-button"
                 className="btn-back w-90 py-3 shadow-lg"
                 onClick={() => navigate(`/games`)}
               >
