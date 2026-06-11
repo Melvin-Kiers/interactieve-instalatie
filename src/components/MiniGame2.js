@@ -112,7 +112,7 @@ export default function MiniGame2({ updateScore, markGameAsPlayed, saveGameResul
 
     let raf;
     const loop = () => {
-      bgX.current -= speed;
+      bgX.current -= speed * 1.05;
       raf = requestAnimationFrame(loop);
     };
 

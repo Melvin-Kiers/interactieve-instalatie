@@ -490,7 +490,7 @@ canvas {
   border-radius: 4px;
   transition: all 0.15s ease;
   z-index: 1;
-  animation: slide 0.2s linear infinite;
+  animation: slide 0.1s linear infinite;
 
 }
 
