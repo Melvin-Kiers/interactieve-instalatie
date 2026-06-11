@@ -1094,6 +1094,7 @@ h1 span {
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.55;
   margin-bottom: 28px;
+  font-family: "safiro-medium";
 }
 
 .quiz-btn-row {
@@ -1126,4 +1127,21 @@ h1 span {
   margin-top: 8px;
   font-size: 16px;
   margin-bottom: 2px;
+}
+
+.restart-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  font-family: "safiro-medium";
+}
+
+.restart-button button {
+  font-size: 24px;
+  background: rgb(206, 57, 57);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
 }

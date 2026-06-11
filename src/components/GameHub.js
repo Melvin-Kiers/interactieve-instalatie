@@ -12,6 +12,7 @@ export default function GameHub({
   setScore,
   playedGames,
   saveToLeaderboard,
+  onReset
 }) {
   const navigate = useNavigate();
   const audioRef = useRef(null);
@@ -305,8 +306,27 @@ useEffect(() => {
   };
 
   window.addEventListener("keydown", handleKey);
-  return () => window.removeEventListener("keydown", handleKey);
-}, [showQuiz, currentQuiz, handleQuizAnswer]);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [showQuiz, currentQuiz, handleQuizAnswer]);
+
+    const handleRestart = () => {
+      if (onReset) onReset();
+      window.location.href = "/";
+    };
+
+    useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.key === "ArrowLeft") {
+          handleRestart();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }, [handleRestart]);
 
   return (
     <section className="game-hub">
@@ -433,6 +453,12 @@ useEffect(() => {
               </div>
             );
           })}
+        </div>
+
+        <div className="restart-button">
+          <button onClick={handleRestart}>
+            Stoppen
+          </button>
         </div>
 
         {allGamesPlayed && (
