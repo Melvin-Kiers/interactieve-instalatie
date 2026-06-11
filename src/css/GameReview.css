@@ -5,6 +5,7 @@
   overflow-x: hidden;
   padding: 2.5rem 2rem;
   color: #fff;
+  background-color: #0a0b0f;
 }
 
 .review-wrap::before {
@@ -47,7 +48,7 @@ h1.title-review {
   text-align: center;
   font-size: 22px;
   font-weight: 900;
-  margin-bottom: 6rem;
+  margin-bottom: 4rem;
   font-family: 'GeneralSans-Bold', Arial, sans-serif;
 }
 

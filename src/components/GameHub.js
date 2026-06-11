@@ -464,7 +464,7 @@ useEffect(() => {
         {allGamesPlayed && (
           <button
             className="col-8 leaderboard-overlay btn btn-orange"
-            style={{ fontSize: "2.5rem" }}
+            style={{ fontSize: "2.3rem" }}
             onClick={() => {
               localStorage.setItem(
                 "myPlayer",
@@ -478,7 +478,7 @@ useEffect(() => {
               navigate("/leaderboard");
             }}
           >
-            Bekijk je score, en die van andere!
+            Druk op de oranje knop om je eindscore te zien, en die van andere!
           </button>
         )}
       </div>
