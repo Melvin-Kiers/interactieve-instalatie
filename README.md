@@ -1,4 +1,30 @@
-# Getting Started with Create React App
+# Hoe kan je mijn prototype draaien op je laptop? (READ ME) / UPDATE voor NA 11-06-2026
+
+1.Download de code van mijn GitHub (https://github.com/Melvin-Kiers/interactieve
+instalatie) door recht bovenin op de groene “code” knop te drukken of open de zip. die 
+in de bijlage zit (school).
+
+2.Pak de zip uit.
+
+3.Sleep het zip bestand in VS Code
+
+4.Open een terminal 
+
+5.Om het prototype te starten moet je eerste starten met “npm install” te typen in de 
+terminal, mocht dit niet eerst werken dan kan het zijn dat je eerst Node.js moet 
+instaleren. Als dit werkt zou je nu zien dat in de terminal allemaal packages worden 
+gedownload. Dit is goed.
+
+6.(NIEUW) Omdat er nu een plugin gebruikt is om je data te exporteren naar een PDF moet je de volgende stap nog uitvoeren in de terminal:
+
+-npm install html2canvas jspdf
+
+7.Als deze stap klaar is kan je “npm start” typen in de terminal en de omgeving zal dan 
+moeten opstarten/draaien op localhost:3000
+
+
+-------------
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
