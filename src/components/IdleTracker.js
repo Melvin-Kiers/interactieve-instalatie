@@ -78,7 +78,7 @@ export default function IdleTracker({ timeout = 30000, countdownStart = 10 }) {
       clearTimeout(idleTimerRef.current);
       clearInterval(countdownTimerRef.current);
     };
-  }, [location.pathname]); // ← showPopup eruit
+  }, [location.pathname]);
 
   if (!showPopup) return null;
 

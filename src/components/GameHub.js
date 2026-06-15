@@ -23,19 +23,19 @@ export default function GameHub({
 
   const quizQuestions = {
     1: {
-      question: "Is de ruimte tussen de buis en Hyperloop is gelijk aan de dikte van een muntje?",
+      question: "Is de ruimte tussen de buis en Hyperloop gelijk aan de dikte van een muntje?",
       correct: "Ja",
-      explanation: "Ja, de ruimte is gelijk aan de dikte van een muntje. Dat is minder dan 2 milimeter!",
+      explanation: "De ruimte is gelijk aan de dikte van een muntje. Dat is minder dan 2 milimeter!",
     },
     2: {
       question: "De Hyperloop gebruikt magneten om van baan te wisselen?",
       correct: "Ja",
-      explanation: "Ja, magneten worden gebruikt om de Hyperloop van baan te laten wisselen."
+      explanation: "Magneten worden gebruikt om de Hyperloop van baan te laten wisselen."
     },
     3: {
       question: "Klopt het dat de Hyperloop bijna net zo snel gaat als een vliegtuig?",
       correct: "Ja",
-      explanation: "Ja, de Hyperloop gaat bijna net zo snel als een vliegtuig. Wel ruim 900km/u!"
+      explanation: "De Hyperloop gaat bijna net zo snel als een vliegtuig. Wel ruim 900km/u!"
     },
   };
 
@@ -63,7 +63,7 @@ const handleQuizAnswer = (answer) => {
     const newScore = score + 50;
 
     setScore(newScore);
-    localStorage.setItem("score", newScore); // <- dit is de fix
+    localStorage.setItem("score", newScore);
   }
 
   setQuizResult({

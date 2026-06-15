@@ -1,7 +1,6 @@
 # Hoe kan je mijn prototype draaien op je laptop? (READ ME) / UPDATE voor NA 11-06-2026
 
-1.Download de code van mijn GitHub (https://github.com/Melvin-Kiers/interactieve
-instalatie) door recht bovenin op de groene “code” knop te drukken of open de zip. die 
+1.Download de code van mijn GitHub (https://github.com/Melvin-Kiers/interactieve-instalatie) door recht bovenin op de groene “code” knop te drukken of open de zip. die 
 in de bijlage zit (school).
 
 2.Pak de zip uit.
